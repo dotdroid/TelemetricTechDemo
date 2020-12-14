@@ -11,6 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 public class SearchScreen extends AppCompatActivity {
@@ -82,7 +86,37 @@ public class SearchScreen extends AppCompatActivity {
                         .searchByDevEUIString("https://dev.telemetric.tech/api.devices.search", devEUI);
                 Log.i(TAG, "Fetched contents of Url: " + result);
 
-                searchResult = result;
+                StringBuilder builder = new StringBuilder();
+
+                try {
+                    JSONArray ja = new JSONArray(result);
+
+
+
+                    for(int i=0; i < ja.length(); i++) {
+                        String jaLastMessage = ja.getJSONObject(i).getString("last_message");
+                        JSONObject joLastMessage = new JSONObject(jaLastMessage);
+
+                        builder.append(ja.getJSONObject(i).getString("title"));
+                        builder.append("\n");
+                        builder.append(ja.getJSONObject(i).getString("deviceID"));
+                        builder.append("\n");
+                        builder.append(ja.getJSONObject(i).getString("keyAp"));
+                        builder.append("\n");
+                        builder.append("Last message:");
+                        builder.append("\n");
+                        builder.append("RSSI: ");
+                        builder.append(joLastMessage.getInt("loRaRSSI"));
+                        builder.append("\n");
+                        builder.append("Device date and time: ");
+                        builder.append(joLastMessage.getString("device_datetime"));
+                    }
+
+                    searchResult = String.valueOf(builder);
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "Couldn't find item " + e);
+                }
 
             } catch (IOException ioe) {
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
