@@ -9,7 +9,9 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,10 +24,12 @@ public class SearchScreen extends AppCompatActivity {
     private static final String TAG = "SearchScreen";
 
     TextView devEUITextView, enterDevEUITextView, searchResultTextView;
-    Button searchButton;
+    Button searchButton, cameraButton;
+    ImageButton clearDevEUIField;
 
-    String devEUI;
+    static String devEUI = "";
     static String searchResult;
+    String searchResultRaw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +40,11 @@ public class SearchScreen extends AppCompatActivity {
         devEUITextView.setText("DevEUI");
 
         enterDevEUITextView = (TextView) findViewById(R.id.enterDevEUI);
+        enterDevEUITextView.setText(devEUI);
         enterDevEUITextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                devEUI = s.toString();
             }
 
             @Override
@@ -49,9 +54,18 @@ public class SearchScreen extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                devEUI = s.toString();
             }
         });
+
+        clearDevEUIField = (ImageButton) this.findViewById(R.id.clearDevEUI);
+        clearDevEUIField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enterDevEUITextView.setText("");
+            }
+        });
+
 
         searchResultTextView = (TextView) findViewById(R.id.searchResult);
         searchResultTextView.setText(searchResult);
@@ -69,8 +83,22 @@ public class SearchScreen extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                if(searchResultRaw.length() < 5) {
+                    Toast.makeText(SearchScreen.this, "DevEUI not found", Toast.LENGTH_SHORT).show();
+                }
+
                 finish();
                 startActivity(getIntent());
+            }
+        });
+
+        cameraButton = (Button) findViewById(R.id.cameraButton);
+        cameraButton.setText("Scan QR");
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CameraScreen.class);
+                startActivity(intent);
             }
         });
 
@@ -85,6 +113,8 @@ public class SearchScreen extends AppCompatActivity {
                 String result = new TelemetricTechMethods()
                         .searchByDevEUIString("https://dev.telemetric.tech/api.devices.search", devEUI);
                 Log.i(TAG, "Fetched contents of Url: " + result);
+
+                searchResultRaw = result;
 
                 StringBuilder builder = new StringBuilder();
 
@@ -108,8 +138,8 @@ public class SearchScreen extends AppCompatActivity {
                         builder.append("RSSI: ");
                         builder.append(joLastMessage.getInt("loRaRSSI"));
                         builder.append("\n");
-                        builder.append("Device date and time: ");
-                        builder.append(joLastMessage.getString("device_datetime"));
+//                        builder.append("Device date and time: ");
+//                        builder.append(joLastMessage.getString("device_datetime"));
                     }
 
                     searchResult = String.valueOf(builder);

@@ -3,6 +3,7 @@
     package="ru.dotdroid.telemetrictechdemo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -12,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TelemetricTechDemo">
         <activity android:name=".SearchScreen"></activity>
+        <activity android:name=".CameraScreen"></activity>
         <activity android:name=".LoginScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
