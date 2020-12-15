@@ -18,6 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SearchScreen extends AppCompatActivity {
 
@@ -27,7 +29,7 @@ public class SearchScreen extends AppCompatActivity {
     Button searchButton, cameraButton;
     ImageButton clearDevEUIField;
 
-    static String devEUI = "";
+    String devEUI = "";
     static String searchResult;
     String searchResultRaw;
 
@@ -66,7 +68,6 @@ public class SearchScreen extends AppCompatActivity {
             }
         });
 
-
         searchResultTextView = (TextView) findViewById(R.id.searchResult);
         searchResultTextView.setText(searchResult);
 
@@ -101,8 +102,6 @@ public class SearchScreen extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 
     private class sendSearch extends AsyncTask<Void, Void, Void> {
@@ -110,8 +109,17 @@ public class SearchScreen extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                String result = new TelemetricTechMethods()
-                        .searchByDevEUIString("https://dev.telemetric.tech/api.devices.search", devEUI);
+                Map<String, String> postData = new HashMap<>();
+                postData.put("search", devEUI);
+
+                PostParamBuild postDataBuild = new PostParamBuild();
+
+                byte[] postDataBytes = postDataBuild.POSTParBuilder(postData).getBytes();
+
+                String result = new SendPostTelemetric()
+                        .sendPostString("https://dev.telemetric.tech/api.devices.search",
+                                postDataBytes, LoginScreen.sessionKey,
+                                String.valueOf(postDataBytes.length));
                 Log.i(TAG, "Fetched contents of Url: " + result);
 
                 searchResultRaw = result;
@@ -120,8 +128,6 @@ public class SearchScreen extends AppCompatActivity {
 
                 try {
                     JSONArray ja = new JSONArray(result);
-
-
 
                     for(int i=0; i < ja.length(); i++) {
                         String jaLastMessage = ja.getJSONObject(i).getString("last_message");
@@ -138,12 +144,8 @@ public class SearchScreen extends AppCompatActivity {
                         builder.append("RSSI: ");
                         builder.append(joLastMessage.getInt("loRaRSSI"));
                         builder.append("\n");
-//                        builder.append("Device date and time: ");
-//                        builder.append(joLastMessage.getString("device_datetime"));
                     }
-
                     searchResult = String.valueOf(builder);
-
                 } catch (JSONException e) {
                     Log.e(TAG, "Couldn't find item " + e);
                 }

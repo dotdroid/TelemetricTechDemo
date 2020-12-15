@@ -16,6 +16,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginScreen extends AppCompatActivity {
 
@@ -94,14 +96,23 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
+
+
     private class connectToUrl extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
                 String md5Auth = new Md5Util().md5Custom(email+password);
-                String result = new TelemetricTechMethods()
-                        .sendLoginString("https://dev.telemetric.tech/api.login", md5Auth);
+                Map<String, String> postData = new HashMap<>();
+                postData.put("authKey", md5Auth);
+                PostParamBuild postDataBuild = new PostParamBuild();
+
+                byte[] postDataBytes = postDataBuild.POSTParBuilder(postData).getBytes();
+                int postDataBytesLen = postDataBytes.length;
+
+                String result = new SendPostTelemetric()
+                        .sendPostString("https://dev.telemetric.tech/api.login", postDataBytes, "", String.valueOf(postDataBytesLen));
                 Log.i(TAG, "Fetched contents of Url: " + result);
 
                 try {
