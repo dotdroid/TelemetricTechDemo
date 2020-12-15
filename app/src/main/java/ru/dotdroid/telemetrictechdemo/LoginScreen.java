@@ -26,7 +26,6 @@ public class LoginScreen extends AppCompatActivity {
     String email, password;
     String loginResult;
     static String sessionKey;
-    static String searchResult;
 
     private static final String TAG = "LoginScreen";
 
@@ -96,8 +95,6 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
-
-
     private class connectToUrl extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -112,7 +109,9 @@ public class LoginScreen extends AppCompatActivity {
                 int postDataBytesLen = postDataBytes.length;
 
                 String result = new SendPostTelemetric()
-                        .sendPostString("https://dev.telemetric.tech/api.login", postDataBytes, "", String.valueOf(postDataBytesLen));
+                        .sendPostString("https://dev.telemetric.tech/api.login",
+                                postDataBytes, "",
+                                String.valueOf(postDataBytesLen));
                 Log.i(TAG, "Fetched contents of Url: " + result);
 
                 try {

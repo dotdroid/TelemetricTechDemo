@@ -26,10 +26,10 @@ public class SearchScreen extends AppCompatActivity {
     private static final String TAG = "SearchScreen";
 
     TextView devEUITextView, enterDevEUITextView, searchResultTextView;
-    Button searchButton, cameraButton;
-    ImageButton clearDevEUIField;
+    Button searchButton;
+    ImageButton clearDevEUIField, cameraButton;
 
-    String devEUI = "";
+    static String devEUI = "";
     static String searchResult;
     String searchResultRaw;
 
@@ -69,7 +69,6 @@ public class SearchScreen extends AppCompatActivity {
         });
 
         searchResultTextView = (TextView) findViewById(R.id.searchResult);
-        searchResultTextView.setText(searchResult);
 
         searchButton = (Button) findViewById(R.id.searchByDevEUI);
         searchButton.setText("Find device");
@@ -88,13 +87,11 @@ public class SearchScreen extends AppCompatActivity {
                     Toast.makeText(SearchScreen.this, "DevEUI not found", Toast.LENGTH_SHORT).show();
                 }
 
-                finish();
-                startActivity(getIntent());
+                searchResultTextView.setText(searchResult);
             }
         });
 
-        cameraButton = (Button) findViewById(R.id.cameraButton);
-        cameraButton.setText("Scan QR");
+        cameraButton = (ImageButton)this.findViewById(R.id.cameraButton);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,6 +140,8 @@ public class SearchScreen extends AppCompatActivity {
                         builder.append("\n");
                         builder.append("RSSI: ");
                         builder.append(joLastMessage.getInt("loRaRSSI"));
+                        builder.append("\n");
+                        builder.append("------------------------");
                         builder.append("\n");
                     }
                     searchResult = String.valueOf(builder);

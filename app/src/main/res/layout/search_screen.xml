@@ -17,68 +17,65 @@
         <TextView
             android:id="@+id/devEUI"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center|right"
             android:padding="5dp"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/enterDevEUI"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:inputType="textPersonName"
-            android:padding="5dp" />
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:padding="5dp"
+            android:ems="10"/>
 
         <ImageButton
             android:id="@+id/clearDevEUI"
-            style="@android:style/Widget.Material.Light.ImageButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#00FFFFFF"
             android:padding="5dp"
             app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
+        <ImageButton
+            android:id="@+id/cameraButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:srcCompat="@android:drawable/ic_menu_camera"
+            android:background="#00FFFFFF"
+            android:padding="5dp"
+            android:ems="5"/>
+
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/searchByDevEUI"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:padding="5dp"
-            android:text="Button" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/cameraButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:ems="7"
             android:padding="5dp"
             android:text="Button" />
 
-    </LinearLayout>
+    </FrameLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/searchResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp" />
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
