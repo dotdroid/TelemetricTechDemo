@@ -6,18 +6,14 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DeviceLab {
     private static DeviceLab sDeviceLab;
-    private List<Device> mDevices;
-    private JSONArray allDevices = MainScreenFragment.sAllDevicesJSONArray;
+    private final List<Device> mDevices;
+    private final JSONArray allDevices = MainScreenFragment.sAllDevicesJSONArray;
 
     private static final String TAG = "DeviceLab";
 

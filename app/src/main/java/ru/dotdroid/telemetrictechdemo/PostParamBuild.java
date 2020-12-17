@@ -7,7 +7,7 @@ import java.util.Map;
 
 class PostParamBuild {
 
-    String POSTParBuilder(Map<String, String> data) throws UnsupportedEncodingException {
+    String postParBuilder(Map<String, String> data) throws UnsupportedEncodingException {
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<String, String> entry : data.entrySet()) {
             if (builder.length() > 0) {

@@ -111,14 +111,14 @@ public class LoginScreen extends AppCompatActivity {
                 postData.put("authKey", md5Auth);
                 PostParamBuild postDataBuild = new PostParamBuild();
 
-                byte[] postDataBytes = postDataBuild.POSTParBuilder(postData).getBytes();
+                byte[] postDataBytes = postDataBuild.postParBuilder(postData).getBytes();
                 int postDataBytesLen = postDataBytes.length;
 
-                String result = new SendPostTelemetric()
+                String result = new SendPost()
                         .sendPostString("https://dev.telemetric.tech/api.login",
                                 postDataBytes, "",
                                 String.valueOf(postDataBytesLen));
-                Log.i(TAG, "Fetched contents of Url: " + result);
+//                Log.i(TAG, "Fetched contents of Url: " + result);
 
                 try {
                     JSONObject jo = new JSONObject(result);

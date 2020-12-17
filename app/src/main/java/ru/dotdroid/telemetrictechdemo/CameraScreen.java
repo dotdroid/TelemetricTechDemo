@@ -13,7 +13,6 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.zxing.Result;
 
 public class CameraScreen extends AppCompatActivity {
-    static String scanResult = "";
     private CodeScanner mCodeScanner;
     TextView scanResultTextView;
 

@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-class SendPostTelemetric {
+class SendPost {
 
     public String sendPostString(String urlSpec, byte[] postData, String cookie, String postDataLen) throws IOException {
         return new String(sendPostBytes(urlSpec, postData, cookie, postDataLen));

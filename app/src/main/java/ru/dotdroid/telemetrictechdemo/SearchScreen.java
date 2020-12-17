@@ -111,9 +111,9 @@ public class SearchScreen extends AppCompatActivity {
 
                 PostParamBuild postDataBuild = new PostParamBuild();
 
-                byte[] postDataBytes = postDataBuild.POSTParBuilder(postData).getBytes();
+                byte[] postDataBytes = postDataBuild.postParBuilder(postData).getBytes();
 
-                String result = new SendPostTelemetric()
+                String result = new SendPost()
                         .sendPostString("https://dev.telemetric.tech/api.devices.search",
                                 postDataBytes, LoginScreen.sSessionKey,
                                 String.valueOf(postDataBytes.length));

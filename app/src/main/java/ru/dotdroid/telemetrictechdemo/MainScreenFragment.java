@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +23,6 @@ public class MainScreenFragment extends Fragment {
     final private static String TAG = "MainScreenFragment";
     protected static JSONArray sAllDevicesJSONArray;
 
-    protected String title, devEUI;
     private RecyclerView mAllDevicesRecyclerView;
     private DeviceAdapter mAdapter;
 
@@ -39,7 +37,7 @@ public class MainScreenFragment extends Fragment {
         new getAllDevices().execute();
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -58,8 +56,8 @@ public class MainScreenFragment extends Fragment {
     }
 
     private class DeviceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView mTitleTextView;
-        private TextView mDevEUITextView;
+        private final TextView mTitleTextView;
+        private final TextView mDevEUITextView;
 
         private Device mDevice;
 
@@ -84,7 +82,7 @@ public class MainScreenFragment extends Fragment {
     }
 
     private class DeviceAdapter extends RecyclerView.Adapter<DeviceHolder> {
-        private List<Device> mDevices;
+        private final List<Device> mDevices;
 
         public DeviceAdapter(List<Device> devices) {
             mDevices = devices;
@@ -116,14 +114,13 @@ public class MainScreenFragment extends Fragment {
                 Map<String, String> postData = new HashMap<>();
                 PostParamBuild postDataBuild = new PostParamBuild();
 
-                byte[] postDataBytes = postDataBuild.POSTParBuilder(postData).getBytes();
+                byte[] postDataBytes = postDataBuild.postParBuilder(postData).getBytes();
                 int postDataBytesLen = postDataBytes.length;
 
-                String result = new SendPostTelemetric()
+                String result = new SendPost()
                         .sendPostString("https://dev.telemetric.tech/api.devices.all",
                                 postDataBytes, LoginScreen.sSessionKey,
                                 String.valueOf(postDataBytesLen));
-//                Log.i(TAG, "Fetched contents of Url: " + result);
 
                 try {
                     sAllDevicesJSONArray = new JSONArray(result);
