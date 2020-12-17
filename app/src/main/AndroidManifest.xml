@@ -14,7 +14,7 @@
         android:theme="@style/Theme.TelemetricTechDemo">
         <activity android:name=".SearchScreen"/>
         <activity android:name=".CameraScreen"/>
-        <activity android:name=".MainScreen"/>
+        <activity android:name=".MainScreenActivity"/>
         <activity android:name=".LoginScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

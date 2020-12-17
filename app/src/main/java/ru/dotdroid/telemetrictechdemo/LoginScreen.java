@@ -25,7 +25,7 @@ public class LoginScreen extends AppCompatActivity {
     Button signInButton;
     String email, password;
     String loginResult;
-    static String sessionKey;
+    protected static String sSessionKey;
 
     private static final String TAG = "LoginScreen";
 
@@ -85,14 +85,20 @@ public class LoginScreen extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                if(loginResult == "true") {
-                    Intent intent = new Intent(LoginScreen.this, SearchScreen.class);
+                if(sSessionKey != "") {
+                    Intent intent = new Intent(LoginScreen.this, MainScreenActivity.class);
                     startActivity(intent);
                 } else {
                     Toast.makeText(LoginScreen.this, R.string.incorrect_pwd, Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sSessionKey = "";
     }
 
     private class connectToUrl extends AsyncTask<Void, Void, Void> {
@@ -117,7 +123,7 @@ public class LoginScreen extends AppCompatActivity {
                 try {
                     JSONObject jo = new JSONObject(result);
                     loginResult = jo.getString("login");
-                    sessionKey = jo.getString("sessionKey");
+                    sSessionKey = jo.getString("sessionKey");
                 } catch (JSONException jse) {
                     Log.e(TAG, "Failed to find login key " + jse);
                 }
