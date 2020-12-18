@@ -88,6 +88,7 @@ public class LoginScreen extends AppCompatActivity {
                 if(sSessionKey != "") {
                     Intent intent = new Intent(LoginScreen.this, MainScreenActivity.class);
                     startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(LoginScreen.this, R.string.incorrect_pwd, Toast.LENGTH_SHORT).show();
                 }

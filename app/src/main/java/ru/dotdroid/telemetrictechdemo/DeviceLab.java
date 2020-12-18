@@ -33,9 +33,9 @@ public class DeviceLab {
         return mDevices;
     }
 
-    public Device getDevice(String devEui) {
+    public Device getDevice(String deviceEui) {
         for(Device device : mDevices) {
-            if(device.getDevEUI().equals(devEui)) {
+            if(device.getDevEUI().equals(deviceEui)) {
                 return device;
             }
         }
@@ -53,7 +53,11 @@ public class DeviceLab {
                     device.setTitle(allDevices.getJSONObject(i).getString("title"));
                     device.setDevEUI(allDevices.getJSONObject(i).getString("deviceID"));
                     device.setAppKey(allDevices.getJSONObject(i).getString("keyAp"));
-                    device.setDeviceType(allDevices.getJSONObject(i).getString("device_type_id"));
+                    device.setDeviceType(allDevices.getJSONObject(i).getString("type_title"));
+                    device.setDescription(allDevices.getJSONObject(i).getString("desc"));
+                    device.setCreateDate(allDevices.getJSONObject(i).getString("created_at"));
+                    device.setLastMessage(allDevices.getJSONObject(i).getString("last_message"));
+                    device.setLastActive(allDevices.getJSONObject(i).getString("last_active"));
                     mDevices.add(device);
                 } catch (JSONException jse) {
                     Log.e(TAG, "JSONException: " + jse);

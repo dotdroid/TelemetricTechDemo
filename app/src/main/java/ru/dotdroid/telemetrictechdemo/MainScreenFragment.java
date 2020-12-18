@@ -1,5 +1,6 @@
 package ru.dotdroid.telemetrictechdemo;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import java.io.IOException;
@@ -25,6 +25,7 @@ public class MainScreenFragment extends Fragment {
 
     private RecyclerView mAllDevicesRecyclerView;
     private DeviceAdapter mAdapter;
+    private int mLastUpdatedPosition;
 
 
     @Override
@@ -37,7 +38,7 @@ public class MainScreenFragment extends Fragment {
         new getAllDevices().execute();
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -47,9 +48,22 @@ public class MainScreenFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
     private void updateUI() {
         DeviceLab deviceLab = DeviceLab.get(getActivity());
         List<Device> devices = deviceLab.getDevices();
+
+        if(mAdapter == null) {
+            mAdapter = new DeviceAdapter(devices);
+            mAllDevicesRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyItemChanged(mLastUpdatedPosition);
+        }
 
         mAdapter = new DeviceAdapter(devices);
         mAllDevicesRecyclerView.setAdapter(mAdapter);
@@ -77,7 +91,9 @@ public class MainScreenFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-
+            Intent intent = DevicePagerActivity.newIntent(getActivity(), mDevice.getDevEUI());
+            mLastUpdatedPosition = this.getAdapterPosition();
+            startActivity(intent);
         }
     }
 

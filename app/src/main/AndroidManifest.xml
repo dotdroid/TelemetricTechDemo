@@ -15,6 +15,10 @@
         <activity android:name=".SearchScreen"/>
         <activity android:name=".CameraScreen"/>
         <activity android:name=".MainScreenActivity"/>
+        <activity
+            android:name=".DevicePagerActivity"
+            android:parentActivityName=".MainScreenActivity">
+        </activity>
         <activity android:name=".LoginScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
