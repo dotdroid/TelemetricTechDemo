@@ -3,6 +3,7 @@ package ru.dotdroid.telemetrictechdemo;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,6 +27,7 @@ public class LoginScreen extends AppCompatActivity {
     String email, password;
     String loginResult;
     protected static String sSessionKey;
+
 
     private static final String TAG = "LoginScreen";
 
