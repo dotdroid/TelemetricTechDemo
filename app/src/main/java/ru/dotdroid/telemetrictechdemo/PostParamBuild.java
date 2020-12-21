@@ -5,7 +5,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-class PostParamBuild {
+public class PostParamBuild {
 
     String postParBuilder(Map<String, String> data) throws UnsupportedEncodingException {
         StringBuilder builder = new StringBuilder();

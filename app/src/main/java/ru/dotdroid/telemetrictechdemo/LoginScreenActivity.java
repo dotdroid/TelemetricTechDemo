@@ -3,7 +3,6 @@ package ru.dotdroid.telemetrictechdemo;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,7 +19,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginScreen extends AppCompatActivity {
+public class LoginScreenActivity extends AppCompatActivity {
 
     TextView emailTv, passTv, emailTextTV, passTextTV;
     Button signInButton;
@@ -36,9 +35,9 @@ public class LoginScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_screen);
 
-        emailTextTV = findViewById(R.id.emailText);
-        emailTextTV.setText("Email");
-        emailTv = findViewById(R.id.editTextTextEmailAddress);
+        emailTextTV = findViewById(R.id.email_text);
+        emailTextTV.setText(R.string.email);
+        emailTv = findViewById(R.id.email_field);
         emailTv.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -54,9 +53,9 @@ public class LoginScreen extends AppCompatActivity {
             }
         });
 
-        passTextTV = findViewById(R.id.passText);
-        passTextTV.setText("Password");
-        passTv = findViewById(R.id.editTextTextPassword);
+        passTextTV = findViewById(R.id.password_text);
+        passTextTV.setText(R.string.password);
+        passTv = findViewById(R.id.password_field);
         passTv.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -73,27 +72,13 @@ public class LoginScreen extends AppCompatActivity {
             }
         });
 
-        signInButton = findViewById(R.id.button);
+        signInButton = findViewById(R.id.login_button);
         signInButton.setText("Log in");
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 new connectToUrl().execute();
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                if(sSessionKey != "") {
-                    Intent intent = new Intent(LoginScreen.this, MainScreenActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(LoginScreen.this, R.string.incorrect_pwd, Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }
@@ -121,7 +106,6 @@ public class LoginScreen extends AppCompatActivity {
                         .sendPostString("https://dev.telemetric.tech/api.login",
                                 postDataBytes, "",
                                 String.valueOf(postDataBytesLen));
-//                Log.i(TAG, "Fetched contents of Url: " + result);
 
                 try {
                     JSONObject jo = new JSONObject(result);
@@ -135,6 +119,18 @@ public class LoginScreen extends AppCompatActivity {
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            if(sSessionKey != "") {
+                Intent intent = new Intent(LoginScreenActivity.this, MainScreenActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(LoginScreenActivity.this, R.string.incorrect_pwd, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

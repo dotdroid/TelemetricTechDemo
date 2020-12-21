@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">TelemetricTech Demo</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="create_device">Create new device</string>
+    <string name="deveui">DevEUI</string>
+    <string name="app_key">AppKey</string>
+    <string name="search">Search</string>
+    <string name="create_device_text">Create device</string>
+    <string name="create_name">Name</string>
+    <string name="create_desc">Description</string>
+    <string name="create_device_type">Device type</string>
+    <string name="scan_qr">Scan QR-code</string>
     <string name="incorrect_pwd">Wrong password!</string>
 </resources>

@@ -115,7 +115,7 @@ public class SearchScreen extends AppCompatActivity {
 
                 String result = new SendPost()
                         .sendPostString("https://dev.telemetric.tech/api.devices.search",
-                                postDataBytes, LoginScreen.sSessionKey,
+                                postDataBytes, LoginScreenActivity.sSessionKey,
                                 String.valueOf(postDataBytes.length));
                 Log.i(TAG, "Fetched contents of Url: " + result);
 

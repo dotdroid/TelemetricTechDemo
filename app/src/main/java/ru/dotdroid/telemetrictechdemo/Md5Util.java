@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-class Md5Util {
+public class Md5Util {
     static String md5Custom(String st) {
         MessageDigest messageDigest = null;
         byte[] digest = new byte[0];

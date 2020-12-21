@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ru.dotdroid.telemetrictechdemo">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,19 +14,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TelemetricTechDemo">
         <activity android:name=".SearchScreen"/>
-        <activity android:name=".CameraScreen"/>
+        <activity
+            android:name=".CameraScreen"
+            android:parentActivityName=".CreateDeviceActivity"/>
+        <activity
+            android:name=".CreateDeviceActivity"
+            android:parentActivityName=".MainScreenActivity"/>
         <activity android:name=".MainScreenActivity"/>
         <activity
             android:name=".DevicePagerActivity"
             android:parentActivityName=".MainScreenActivity">
         </activity>
-        <activity android:name=".LoginScreen">
+        <activity android:name=".LoginScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

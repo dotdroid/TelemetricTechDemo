@@ -11,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
 
+import ru.dotdroid.telemetrictechdemo.devices.Device;
+import ru.dotdroid.telemetrictechdemo.devices.DeviceLab;
+
 public class DevicePagerActivity extends AppCompatActivity {
 
     public static final String EXTRA_DEVICE_EUI = "ru.dotdroid.telemetrictechdemo.device_eui";
@@ -39,7 +42,7 @@ public class DevicePagerActivity extends AppCompatActivity {
             @Override
             public Fragment getItem(int position) {
                 Device device = mDevices.get(position);
-                return DeviceFragment.newInstance(device.getDevEUI());
+                return DeviceFragment.newInstance(device.getDeviceEui());
             }
 
             @Override
@@ -48,7 +51,7 @@ public class DevicePagerActivity extends AppCompatActivity {
             }
         });
         for(int i=0; i < mDevices.size(); i++) {
-            if(mDevices.get(i).getDevEUI().equals(deviceEui)) {
+            if(mDevices.get(i).getDeviceEui().equals(deviceEui)) {
                 mViewPager.setCurrentItem(i);
             }
         }

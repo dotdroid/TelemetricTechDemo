@@ -8,44 +8,65 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.google.gson.Gson;
 import org.json.JSONArray;
-import org.json.JSONException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ru.dotdroid.telemetrictechdemo.devices.Device;
+import ru.dotdroid.telemetrictechdemo.devices.DeviceLab;
+
 public class MainScreenFragment extends Fragment {
 
     final private static String TAG = "MainScreenFragment";
-    protected static JSONArray sAllDevicesJSONArray;
 
     private RecyclerView mAllDevicesRecyclerView;
     private DeviceAdapter mAdapter;
     private int mLastUpdatedPosition;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_screen, container, false);
+        setHasOptionsMenu(true);
+        setRetainInstance(true);
 
         mAllDevicesRecyclerView = (RecyclerView) view.findViewById(R.id.allDevicesList);
         mAllDevicesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         new getAllDevices().execute();
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        updateUI();
-
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_main_screen, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.create_device:
+                Intent intentCreate = new Intent(getActivity(), CreateDeviceActivity.class);
+                startActivity(intentCreate);
+                return true;
+            case R.id.logout:
+                Intent intentLogout = new Intent(getActivity(), LoginScreenActivity.class);
+                startActivity(intentLogout);
+                getActivity().finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -86,12 +107,12 @@ public class MainScreenFragment extends Fragment {
         public void bind(Device device) {
             mDevice = device;
             mTitleTextView.setText(mDevice.getTitle());
-            mDevEUITextView.setText(mDevice.getDevEUI());
+            mDevEUITextView.setText(mDevice.getDeviceEui());
         }
 
         @Override
         public void onClick(View view) {
-            Intent intent = DevicePagerActivity.newIntent(getActivity(), mDevice.getDevEUI());
+            Intent intent = DevicePagerActivity.newIntent(getActivity(), mDevice.getDeviceEui());
             mLastUpdatedPosition = this.getAdapterPosition();
             startActivity(intent);
         }
@@ -126,6 +147,7 @@ public class MainScreenFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
+
             try {
                 Map<String, String> postData = new HashMap<>();
                 PostParamBuild postDataBuild = new PostParamBuild();
@@ -135,19 +157,38 @@ public class MainScreenFragment extends Fragment {
 
                 String result = new SendPost()
                         .sendPostString("https://dev.telemetric.tech/api.devices.all",
-                                postDataBytes, LoginScreen.sSessionKey,
+                                postDataBytes, LoginScreenActivity.sSessionKey,
                                 String.valueOf(postDataBytesLen));
 
-                try {
-                    sAllDevicesJSONArray = new JSONArray(result);
-                } catch (JSONException jse) {
-                    Log.e(TAG, "JSONArray exception: " + jse);
+                Gson gson = new Gson();
+
+                Device[] devices = gson.fromJson(result, Device[].class);
+
+                DeviceLab deviceLab = DeviceLab.get(getActivity());
+                List<Device> devicesList = deviceLab.getDevices();
+
+                for(Device d : devices) {
+                    d.getTitle();
+                    d.getDeviceEui();
+                    d.getKeyAp();
+                    d.getTypeTitle();
+                    d.getDesc();
+                    d.getCreatedAt();
+                    d.getLastMessage();
+                    d.getLastActive();
+                    devicesList.add(d);
                 }
 
             } catch (IOException ioe) {
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            updateUI();
         }
     }
 }
