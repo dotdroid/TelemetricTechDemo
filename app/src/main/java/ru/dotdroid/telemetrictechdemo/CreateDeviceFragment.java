@@ -1,45 +1,57 @@
 package ru.dotdroid.telemetrictechdemo;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
-
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ru.dotdroid.telemetrictechdemo.devices.Device;
 import ru.dotdroid.telemetrictechdemo.devices.DeviceLab;
 import ru.dotdroid.telemetrictechdemo.devices.DeviceType;
-import ru.dotdroid.telemetrictechdemo.devices.DeviceTypes;
 
 public class CreateDeviceFragment extends Fragment {
 
     private static final String TAG = "CreateDeviceFragment";
+    private static final String EXTRA_DEVEUI = "ru.dotdroid.telemetrictechdemo.deviceEui";
+    private static final int REQUEST_DEVEUI = 0;
 
     private List<DeviceType> mDeviceTypes;
 
+    private String mDeviceEui, mDeviceTitle, mDeviceDesc, mDeviceType, mDeviceTypeTitle, mDeviceKeyApp;
+
     TextView mCreateDeviceText, mCreateName, mCreateDevEui, mCreateAppKey,  mCreateDesc,  mCreateDeviceType;
     EditText mCreateNameField, mCreateDevEuiField, mCreateAppKeyField, mCreateDescField;
-    Button mCreateQR;
+    Button mCreateDevice;
     Spinner mCreateDeviceTypeSpinner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_device, container, false);
 
-        new getAllDevicesTypes().execute();
+        setHasOptionsMenu(true);
+        setRetainInstance(true);
 
         DeviceLab deviceLab = DeviceLab.get(getActivity());
         mDeviceTypes = deviceLab.getDeviceTypes();
@@ -58,28 +70,136 @@ public class CreateDeviceFragment extends Fragment {
         mCreateDeviceType.setText(R.string.create_device_type);
 
         mCreateNameField = (EditText) view.findViewById(R.id.create_name_field);
-        mCreateDevEuiField = (EditText) view.findViewById(R.id.create_deveui_field);
-        mCreateAppKeyField = (EditText) view.findViewById(R.id.create_appkey_field);
-        mCreateDescField = (EditText) view.findViewById(R.id.create_desc_field);
+        mCreateNameField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        mCreateQR = (Button) view.findViewById(R.id.create_scan_qr);
-        mCreateQR.setText(R.string.scan_qr);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                mDeviceTitle = charSequence.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mCreateDevEuiField = (EditText) view.findViewById(R.id.create_deveui_field);
+        mCreateDevEuiField.setText(mDeviceEui);
+        mCreateDevEuiField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                mDeviceEui = charSequence.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mCreateAppKeyField = (EditText) view.findViewById(R.id.create_appkey_field);
+        mCreateAppKeyField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                mDeviceKeyApp = charSequence.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mCreateDescField = (EditText) view.findViewById(R.id.create_desc_field);
+        mCreateDescField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                mDeviceDesc = charSequence.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mCreateDevice = (Button) view.findViewById(R.id.create_device_button);
+        mCreateDevice.setText(R.string.create_device_button);
+        mCreateDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new createDevice().execute();
+            }
+        });
+
 
         mCreateDeviceTypeSpinner = (Spinner) view.findViewById(R.id.create_device_type_spinner);
         mCreateDeviceTypeSpinner.setEnabled(false);
+        new getAllDevicesTypes().execute();
+        mCreateDeviceTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                mDeviceType = mDeviceTypes.get(position).getId();
+                mDeviceTypeTitle = mDeviceTypes.get(position).getTitle();
 
-//        String[] mDeviceTypesTitle = new String[mDeviceTypes.size()];
-//
-//        for(int i=0; i<mDeviceTypes.size(); i++) {
-//
-//            mDeviceTypes.toArray(mDeviceTypesTitle);
-//        }
-//
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item , mDeviceTypesTitle);
+                mCreateDeviceTypeSpinner.setTextAlignment(position);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_create_device, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.camera_button:
+                Intent intent = new Intent(getActivity(), CameraScreenActivity.class);
+                startActivityForResult(intent, REQUEST_DEVEUI);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if(requestCode == REQUEST_DEVEUI) {
+            if (data == null) {
+                return;
+            }
+            mDeviceEui = CameraScreenActivity.
+        }
     }
 
     private class getAllDevicesTypes extends AsyncTask<Void, Void, Void> {
@@ -100,9 +220,6 @@ public class CreateDeviceFragment extends Fragment {
                                 String.valueOf(postDataBytesLen));
 
                 String cropresult = result.substring(20, result.length() - 2);
-
-//                Log.i(TAG, cropresult);
-
 
                 Gson gson = new Gson();
 
@@ -126,7 +243,63 @@ public class CreateDeviceFragment extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+            ArrayAdapter<DeviceType> adapter = new ArrayAdapter<DeviceType>(getActivity(), android.R.layout.simple_spinner_item, mDeviceTypes);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mCreateDeviceTypeSpinner.setAdapter(adapter);
             mCreateDeviceTypeSpinner.setEnabled(true);
+            mCreateDeviceTypeSpinner.setSelection(0);
+        }
+    }
+
+    private class createDevice extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+                Map<String, String> postData = new HashMap<>();
+                postData.put("deviceID", mDeviceEui);
+                postData.put("deviceGateway", "");
+                postData.put("gatewayID", "");
+                postData.put("inside_addr", "");
+                postData.put("deviceTitle", mDeviceTitle);
+                postData.put("deviceDesc", mDeviceDesc);
+                postData.put("deviceType", mDeviceType);
+                postData.put("keyAp", mDeviceKeyApp);
+                postData.put("keyNw", "");
+                PostParamBuild postDataBuild = new PostParamBuild();
+
+                byte[] postDataBytes = postDataBuild.postParBuilder(postData).getBytes();
+                int postDataBytesLen = postDataBytes.length;
+
+                String result = new SendPost()
+                        .sendPostString("https://dev.telemetric.tech/api.devices.create",
+                                postDataBytes, LoginScreenActivity.sSessionKey,
+                                String.valueOf(postDataBytesLen));
+                Log.i(TAG, result);
+
+                Device d = new Device();
+                DeviceLab deviceLab = DeviceLab.get(getActivity());
+                List<Device> devicesList = deviceLab.getDevices();
+
+                d.setTitle(mDeviceTitle);
+                d.setDeviceEui(mDeviceEui);
+                d.setKeyAp(mDeviceKeyApp);
+                d.setTypeTitle(mDeviceTypeTitle);
+                d.setDesc(mDeviceDesc);
+                d.setCreatedAt(new Date().toString());
+                devicesList.add(0, d);
+
+            } catch (IOException ioe) {
+                Log.e(TAG, "Failed to fetch URL: ", ioe);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            getActivity().finish();
         }
     }
 }

@@ -12,16 +12,16 @@ import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.zxing.Result;
 
-public class CameraScreen extends AppCompatActivity {
+public class CameraScreenActivity extends AppCompatActivity {
+
+    private static final String EXTRA_DEVEUI = "ru.dotdroid.telemetrictechdemo.deviceEui";
     private CodeScanner mCodeScanner;
-    TextView scanResultTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.camera_screen);
+        setContentView(R.layout.activity_camera_screen);
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
-        scanResultTextView = (TextView) findViewById(R.id.scanResultTextView);
         mCodeScanner = new CodeScanner(this, scannerView);
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
@@ -29,9 +29,9 @@ public class CameraScreen extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SearchScreen.devEUI = result.getText();
-                        finish();
-                        Intent intent = new Intent(getApplicationContext(), SearchScreen.class);
+                        Intent intent = new Intent();
+                        intent.putExtra(EXTRA_DEVEUI, String.valueOf(result));
+
                         startActivity(intent);
                     }
                 });

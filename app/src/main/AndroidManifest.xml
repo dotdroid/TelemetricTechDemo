@@ -14,8 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TelemetricTechDemo">
         <activity android:name=".SearchScreen"/>
+<!--        <activity android:name=".LoginScreenActivity"/>-->
         <activity
-            android:name=".CameraScreen"
+            android:name=".CameraScreenActivity"
             android:parentActivityName=".CreateDeviceActivity"/>
         <activity
             android:name=".CreateDeviceActivity"

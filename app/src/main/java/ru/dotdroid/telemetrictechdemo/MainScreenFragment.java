@@ -13,9 +13,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.gson.Gson;
-import org.json.JSONArray;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,13 @@ public class MainScreenFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_screen, container, false);
+
+        if(LoginScreenActivity.sSessionKey.equals("")) {
+            getActivity().finish();
+            Intent intent = new Intent(getContext(), LoginScreenActivity.class);
+            startActivity(intent);
+        }
+
         setHasOptionsMenu(true);
         setRetainInstance(true);
 
@@ -91,23 +99,31 @@ public class MainScreenFragment extends Fragment {
     }
 
     private class DeviceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView mTitleTextView;
-        private final TextView mDevEUITextView;
+        private final TextView mTitleTextView, mDevEUITextView;
+        private final ImageView mImageView;
 
         private Device mDevice;
 
         public DeviceHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_device, parent, false));
+            super(inflater.inflate(R.layout.fragment_list_item_device, parent, false));
             itemView.setOnClickListener(this);
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_title);
             mDevEUITextView = (TextView) itemView.findViewById(R.id.list_item_deveui);
+            mImageView = (ImageView) itemView.findViewById(R.id.list_device_image);
         }
 
         public void bind(Device device) {
             mDevice = device;
             mTitleTextView.setText(mDevice.getTitle());
             mDevEUITextView.setText(mDevice.getDeviceEui());
+            if(mDevice.getDeviceTypeId().equals("17")){
+                mImageView.setImageResource(R.drawable.electro);
+            } else if(mDevice.getDeviceTypeId().equals("53")) {
+                mImageView.setImageResource(R.drawable.baza);
+            } else if(mDevice.getDeviceTypeId().equals("66")) {
+                mImageView.setImageResource(R.drawable.water);
+            }
         }
 
         @Override

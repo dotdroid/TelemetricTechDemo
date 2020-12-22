@@ -25,7 +25,7 @@ public class LoginScreenActivity extends AppCompatActivity {
     Button signInButton;
     String email, password;
     String loginResult;
-    protected static String sSessionKey;
+    protected static String sSessionKey = "";
 
 
     private static final String TAG = "LoginScreen";
@@ -33,7 +33,7 @@ public class LoginScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_screen);
+        setContentView(R.layout.activity_login_screen);
 
         emailTextTV = findViewById(R.id.email_text);
         emailTextTV.setText(R.string.email);

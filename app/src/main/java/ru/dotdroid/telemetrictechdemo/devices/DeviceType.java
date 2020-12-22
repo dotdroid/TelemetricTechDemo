@@ -38,8 +38,14 @@ public class DeviceType {
     @SerializedName("active")
     private String mActive;
 
-    public DeviceType() {
+    public DeviceType(String id, String title) {
+        mId = id;
+        mTitle = title;
+    }
 
+    @Override
+    public String toString() {
+        return mTitle;
     }
 
     public String getId() {

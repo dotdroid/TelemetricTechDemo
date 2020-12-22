@@ -95,7 +95,7 @@ public class SearchScreen extends AppCompatActivity {
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), CameraScreen.class);
+                Intent intent = new Intent(getApplicationContext(), CameraScreenActivity.class);
                 startActivity(intent);
             }
         });

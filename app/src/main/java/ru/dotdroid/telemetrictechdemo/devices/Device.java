@@ -88,7 +88,7 @@ public class Device {
         return mDeviceEui;
     }
 
-    public void setDeviceID(String deviceEui) {
+    public void setDeviceEui(String deviceEui) {
         mDeviceEui = deviceEui;
     }
 

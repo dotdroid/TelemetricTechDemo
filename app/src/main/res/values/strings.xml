@@ -12,6 +12,7 @@
     <string name="create_name">Name</string>
     <string name="create_desc">Description</string>
     <string name="create_device_type">Device type</string>
+    <string name="create_device_button">Create device</string>
     <string name="scan_qr">Scan QR-code</string>
     <string name="incorrect_pwd">Wrong password!</string>
 </resources>
