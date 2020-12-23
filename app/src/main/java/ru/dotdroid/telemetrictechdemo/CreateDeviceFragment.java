@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.service.controls.DeviceTypes;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,6 +20,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Date;
@@ -31,6 +32,8 @@ import java.util.Map;
 import ru.dotdroid.telemetrictechdemo.devices.Device;
 import ru.dotdroid.telemetrictechdemo.devices.DeviceLab;
 import ru.dotdroid.telemetrictechdemo.devices.DeviceType;
+
+import static android.app.Activity.RESULT_OK;
 
 public class CreateDeviceFragment extends Fragment {
 
@@ -193,15 +196,14 @@ public class CreateDeviceFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode != Activity.RESULT_OK) {
-            return;
-        }
+        Log.i(TAG, String.valueOf(resultCode));
 
-        if(requestCode == REQUEST_DEVEUI) {
-            if (data == null) {
-                return;
-            }
-//            mDeviceEui = CameraScreenActivity.
+        if(resultCode == RESULT_OK) {
+            String devEui = data.getStringExtra(EXTRA_DEVEUI);
+            mDeviceEui = devEui;
+            mCreateDevEuiField.setText(devEui);
+        } else {
+            Toast.makeText(getContext(), "DevEUI not found", Toast.LENGTH_SHORT).show();
         }
     }
 

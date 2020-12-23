@@ -12,9 +12,11 @@ import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.zxing.Result;
 
+import java.util.Date;
+
 public class CameraScreenActivity extends AppCompatActivity {
 
-    private static final String EXTRA_DEVEUI = "ru.dotdroid.telemetrictechdemo.deviceEui";
+    public static final String EXTRA_DEVEUI = "ru.dotdroid.telemetrictechdemo.deviceEui";
     private CodeScanner mCodeScanner;
 
     @Override
@@ -31,8 +33,12 @@ public class CameraScreenActivity extends AppCompatActivity {
                     public void run() {
                         Intent intent = new Intent();
                         intent.putExtra(EXTRA_DEVEUI, String.valueOf(result));
-
-                        startActivity(intent);
+                        if(String.valueOf(result)!=null) {
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        } else {
+                            setResult(RESULT_CANCELED);
+                        }
                     }
                 });
             }
