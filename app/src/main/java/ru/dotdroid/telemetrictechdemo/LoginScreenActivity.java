@@ -9,22 +9,25 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LoginScreenActivity extends AppCompatActivity {
 
-    TextView emailTv, passTv, emailTextTV, passTextTV;
-    Button signInButton;
-    String email, password;
-    String loginResult;
+    private TextView mEmailTextView, mPasswordTextView;
+    private EditText mEmailTextViewField, mPasswordTextViewField;
+    private Button mLogInButton;
+    private String mEmail, mPassword;
     protected static String sSessionKey = "";
 
 
@@ -35,17 +38,20 @@ public class LoginScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        emailTextTV = findViewById(R.id.email_text);
-        emailTextTV.setText(R.string.email);
-        emailTv = findViewById(R.id.email_field);
-        emailTv.addTextChangedListener(new TextWatcher() {
+        mEmailTextView = findViewById(R.id.login_email_text);
+        mEmailTextView.setText(R.string.email);
+        mPasswordTextView = findViewById(R.id.login_password_text);
+        mPasswordTextView.setText(R.string.password);
+
+        mEmailTextViewField = findViewById(R.id.login_email_field);
+        mEmailTextViewField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                email = s.toString();
+                mEmail = s.toString();
             }
 
             @Override
@@ -53,17 +59,16 @@ public class LoginScreenActivity extends AppCompatActivity {
             }
         });
 
-        passTextTV = findViewById(R.id.password_text);
-        passTextTV.setText(R.string.password);
-        passTv = findViewById(R.id.password_field);
-        passTv.addTextChangedListener(new TextWatcher() {
+
+        mPasswordTextViewField = findViewById(R.id.login_password_field);
+        mPasswordTextViewField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                password = s.toString();
+                mPassword = s.toString();
             }
 
             @Override
@@ -72,9 +77,9 @@ public class LoginScreenActivity extends AppCompatActivity {
             }
         });
 
-        signInButton = findViewById(R.id.login_button);
-        signInButton.setText("Log in");
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        mLogInButton = findViewById(R.id.login_button);
+        mLogInButton.setText("Log in");
+        mLogInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -94,7 +99,7 @@ public class LoginScreenActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                String md5Auth = new Md5Util().md5Custom(email+password);
+                String md5Auth = new Md5Util().md5Custom(mEmail + mPassword);
                 Map<String, String> postData = new HashMap<>();
                 postData.put("authKey", md5Auth);
                 PostParamBuild postDataBuild = new PostParamBuild();
@@ -107,13 +112,9 @@ public class LoginScreenActivity extends AppCompatActivity {
                                 postDataBytes, "",
                                 String.valueOf(postDataBytesLen));
 
-                try {
-                    JSONObject jo = new JSONObject(result);
-                    loginResult = jo.getString("login");
-                    sSessionKey = jo.getString("sessionKey");
-                } catch (JSONException jse) {
-                    Log.e(TAG, "Failed to find login key " + jse);
-                }
+                Response login = new Gson().fromJson(result, Response.class);
+
+                if(login.getError() == null) sSessionKey = login.getSessionKey();
 
             } catch (IOException ioe) {
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
@@ -124,12 +125,13 @@ public class LoginScreenActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+
             if(sSessionKey != "") {
                 Intent intent = new Intent(LoginScreenActivity.this, MainScreenActivity.class);
                 startActivity(intent);
                 finish();
             } else {
-                Toast.makeText(LoginScreenActivity.this, R.string.incorrect_pwd, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.incorrect_pwd,Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Md5Util {
-    static String md5Custom(String st) {
+    public String md5Custom(String st) {
         MessageDigest messageDigest = null;
         byte[] digest = new byte[0];
 

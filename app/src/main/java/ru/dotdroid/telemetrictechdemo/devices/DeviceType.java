@@ -2,185 +2,205 @@ package ru.dotdroid.telemetrictechdemo.devices;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class DeviceType {
-    @SerializedName("id")
-    private String mId;
-    @SerializedName("deviceTypeID")
-    private String mDeviceTypeID;
-    @SerializedName("title")
-    private String mTitle;
-    @SerializedName("keyAp")
-    private String mKeyAp;
-    @SerializedName("keyNw")
-    private String mKeyNw;
-    @SerializedName("group_id")
-    private String mGroupId;
-    @SerializedName("amount_inputs")
-    private String mAmountInputs;
-    @SerializedName("amount_outputs")
-    private String mAmountOutputs;
-    @SerializedName("_232")
-    private String m232;
-    @SerializedName("_485")
-    private String m485;
-    @SerializedName("report_period_update")
-    private String mReportPeriodUpdate;
-    @SerializedName("report_online_settings")
-    private String mReportOnlineSettings;
-    @SerializedName("allow_trigger")
-    private String mAllowTrigger;
-    @SerializedName("can_gateway")
-    private String mCanGateway;
-    @SerializedName("photo_url")
-    private String mPhotoUrl;
-    @SerializedName("calibration_json")
-    private String mCalibrationJson;
-    @SerializedName("active")
-    private String mActive;
+    @SerializedName("devices")
+    private types mDevices;
 
-    public DeviceType(String id, String title) {
-        mId = id;
-        mTitle = title;
+    public types getDevices() {
+        return mDevices;
     }
 
-    @Override
-    public String toString() {
-        return mTitle;
+    public void setDevices(types devices) {
+        mDevices = devices;
     }
 
-    public String getId() {
-        return mId;
-    }
+    public class types {
+        @SerializedName("types")
+        private List<types> mTypes;
+        @SerializedName("id")
+        private String mId;
+        @SerializedName("deviceTypeID")
+        private String mDeviceTypeID;
+        @SerializedName("title")
+        private String mTitle;
+        @SerializedName("keyAp")
+        private String mKeyAp;
+        @SerializedName("keyNw")
+        private String mKeyNw;
+        @SerializedName("group_id")
+        private String mGroupId;
+        @SerializedName("amount_inputs")
+        private String mAmountInputs;
+        @SerializedName("amount_outputs")
+        private String mAmountOutputs;
+        @SerializedName("_232")
+        private String m232;
+        @SerializedName("_485")
+        private String m485;
+        @SerializedName("report_period_update")
+        private String mReportPeriodUpdate;
+        @SerializedName("report_online_settings")
+        private String mReportOnlineSettings;
+        @SerializedName("allow_trigger")
+        private String mAllowTrigger;
+        @SerializedName("can_gateway")
+        private String mCanGateway;
+        @SerializedName("photo_url")
+        private String mPhotoUrl;
+        @SerializedName("calibration_json")
+        private String mCalibrationJson;
+        @SerializedName("active")
+        private String mActive;
 
-    public void setId(String id) {
-        mId = id;
-    }
+        @Override
+        public String toString() {
+            return mTitle;
+        }
 
-    public String getDeviceTypeID() {
-        return mDeviceTypeID;
-    }
+        public List<types> getTypes() {
+            return mTypes;
+        }
 
-    public void setDeviceTypeID(String deviceTypeID) {
-        mDeviceTypeID = deviceTypeID;
-    }
+        public void setTypes(List<types> types) {
+            mTypes = types;
+        }
 
-    public String getTitle() {
-        return mTitle;
-    }
+        public String getId() {
+            return mId;
+        }
 
-    public void setTitle(String title) {
-        mTitle = title;
-    }
+        public void setId(String id) {
+            mId = id;
+        }
 
-    public String getKeyAp() {
-        return mKeyAp;
-    }
+        public String getDeviceTypeID() {
+            return mDeviceTypeID;
+        }
 
-    public void setKeyAp(String keyAp) {
-        mKeyAp = keyAp;
-    }
+        public void setDeviceTypeID(String deviceTypeID) {
+            mDeviceTypeID = deviceTypeID;
+        }
 
-    public String getKeyNw() {
-        return mKeyNw;
-    }
+        public String getTitle() {
+            return mTitle;
+        }
 
-    public void setKeyNw(String keyNw) {
-        mKeyNw = keyNw;
-    }
+        public void setTitle(String title) {
+            mTitle = title;
+        }
 
-    public String getGroupId() {
-        return mGroupId;
-    }
+        public String getKeyAp() {
+            return mKeyAp;
+        }
 
-    public void setGroupId(String groupId) {
-        mGroupId = groupId;
-    }
+        public void setKeyAp(String keyAp) {
+            mKeyAp = keyAp;
+        }
 
-    public String getAmountInputs() {
-        return mAmountInputs;
-    }
+        public String getKeyNw() {
+            return mKeyNw;
+        }
 
-    public void setAmountInputs(String amountInputs) {
-        mAmountInputs = amountInputs;
-    }
+        public void setKeyNw(String keyNw) {
+            mKeyNw = keyNw;
+        }
 
-    public String getAmountOutputs() {
-        return mAmountOutputs;
-    }
+        public String getGroupId() {
+            return mGroupId;
+        }
 
-    public void setAmountOutputs(String amountOutputs) {
-        mAmountOutputs = amountOutputs;
-    }
+        public void setGroupId(String groupId) {
+            mGroupId = groupId;
+        }
 
-    public String getM232() {
-        return m232;
-    }
+        public String getAmountInputs() {
+            return mAmountInputs;
+        }
 
-    public void setM232(String m232) {
-        this.m232 = m232;
-    }
+        public void setAmountInputs(String amountInputs) {
+            mAmountInputs = amountInputs;
+        }
 
-    public String getM485() {
-        return m485;
-    }
+        public String getAmountOutputs() {
+            return mAmountOutputs;
+        }
 
-    public void setM485(String m485) {
-        this.m485 = m485;
-    }
+        public void setAmountOutputs(String amountOutputs) {
+            mAmountOutputs = amountOutputs;
+        }
 
-    public String getReportPeriodUpdate() {
-        return mReportPeriodUpdate;
-    }
+        public String getM232() {
+            return m232;
+        }
 
-    public void setReportPeriodUpdate(String reportPeriodUpdate) {
-        mReportPeriodUpdate = reportPeriodUpdate;
-    }
+        public void setM232(String m232) {
+            this.m232 = m232;
+        }
 
-    public String getReportOnlineSettings() {
-        return mReportOnlineSettings;
-    }
+        public String getM485() {
+            return m485;
+        }
 
-    public void setReportOnlineSettings(String reportOnlineSettings) {
-        mReportOnlineSettings = reportOnlineSettings;
-    }
+        public void setM485(String m485) {
+            this.m485 = m485;
+        }
 
-    public String getAllowTrigger() {
-        return mAllowTrigger;
-    }
+        public String getReportPeriodUpdate() {
+            return mReportPeriodUpdate;
+        }
 
-    public void setAllowTrigger(String allowTrigger) {
-        mAllowTrigger = allowTrigger;
-    }
+        public void setReportPeriodUpdate(String reportPeriodUpdate) {
+            mReportPeriodUpdate = reportPeriodUpdate;
+        }
 
-    public String getCanGateway() {
-        return mCanGateway;
-    }
+        public String getReportOnlineSettings() {
+            return mReportOnlineSettings;
+        }
 
-    public void setCanGateway(String canGateway) {
-        mCanGateway = canGateway;
-    }
+        public void setReportOnlineSettings(String reportOnlineSettings) {
+            mReportOnlineSettings = reportOnlineSettings;
+        }
 
-    public String getPhotoUrl() {
-        return mPhotoUrl;
-    }
+        public String getAllowTrigger() {
+            return mAllowTrigger;
+        }
 
-    public void setPhotoUrl(String photoUrl) {
-        mPhotoUrl = photoUrl;
-    }
+        public void setAllowTrigger(String allowTrigger) {
+            mAllowTrigger = allowTrigger;
+        }
 
-    public String getCalibrationJson() {
-        return mCalibrationJson;
-    }
+        public String getCanGateway() {
+            return mCanGateway;
+        }
 
-    public void setCalibrationJson(String calibrationJson) {
-        mCalibrationJson = calibrationJson;
-    }
+        public void setCanGateway(String canGateway) {
+            mCanGateway = canGateway;
+        }
 
-    public String getActive() {
-        return mActive;
-    }
+        public String getPhotoUrl() {
+            return mPhotoUrl;
+        }
 
-    public void setActive(String active) {
-        mActive = active;
+        public void setPhotoUrl(String photoUrl) {
+            mPhotoUrl = photoUrl;
+        }
+
+        public String getCalibrationJson() {
+            return mCalibrationJson;
+        }
+
+        public void setCalibrationJson(String calibrationJson) {
+            mCalibrationJson = calibrationJson;
+        }
+
+        public String getActive() {
+            return mActive;
+        }
+
+        public void setActive(String active) {
+            mActive = active;
+        }
     }
 }

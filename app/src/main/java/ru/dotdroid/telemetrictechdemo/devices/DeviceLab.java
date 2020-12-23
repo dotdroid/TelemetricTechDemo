@@ -8,7 +8,7 @@ import java.util.List;
 public class DeviceLab {
     private static DeviceLab sDeviceLab;
     private final List<Device> mDevices;
-    private final List<DeviceType> mDeviceTypes;
+    private final List<DeviceType.types> mDeviceTypes;
 
     private static final String TAG = "DeviceLab";
 
@@ -28,7 +28,12 @@ public class DeviceLab {
         return mDevices;
     }
 
-    public List<DeviceType> getDeviceTypes() {
+    public void clearLists() {
+        mDevices.clear();
+        mDeviceTypes.clear();
+    }
+
+    public List<DeviceType.types> getDeviceTypes() {
         return mDeviceTypes;
     }
 

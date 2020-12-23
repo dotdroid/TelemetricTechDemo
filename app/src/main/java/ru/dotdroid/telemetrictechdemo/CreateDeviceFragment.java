@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.service.controls.DeviceTypes;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,9 +38,11 @@ public class CreateDeviceFragment extends Fragment {
     private static final String EXTRA_DEVEUI = "ru.dotdroid.telemetrictechdemo.deviceEui";
     private static final int REQUEST_DEVEUI = 0;
 
-    private List<DeviceType> mDeviceTypes;
+    private List<DeviceType.types> mDeviceTypes;
 
-    private String mDeviceEui, mDeviceTitle, mDeviceDesc, mDeviceType, mDeviceTypeTitle, mDeviceKeyApp;
+    private String mDeviceEui, mDeviceTitle, mDeviceDesc, mDeviceType, mDeviceTypeTitle,
+            mDeviceKeyApp, mDeviceTypeId;
+
 
     TextView mCreateDeviceText, mCreateName, mCreateDevEui, mCreateAppKey,  mCreateDesc,  mCreateDeviceType;
     EditText mCreateNameField, mCreateDevEuiField, mCreateAppKeyField, mCreateDescField;
@@ -157,7 +160,7 @@ public class CreateDeviceFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 mDeviceType = mDeviceTypes.get(position).getId();
                 mDeviceTypeTitle = mDeviceTypes.get(position).getTitle();
-
+                mDeviceTypeId = mDeviceTypes.get(position).getDeviceTypeID();
                 mCreateDeviceTypeSpinner.setTextAlignment(position);
             }
 
@@ -198,7 +201,7 @@ public class CreateDeviceFragment extends Fragment {
             if (data == null) {
                 return;
             }
-            mDeviceEui = CameraScreenActivity.
+//            mDeviceEui = CameraScreenActivity.
         }
     }
 
@@ -219,19 +222,17 @@ public class CreateDeviceFragment extends Fragment {
                                 postDataBytes, LoginScreenActivity.sSessionKey,
                                 String.valueOf(postDataBytesLen));
 
-                String cropresult = result.substring(20, result.length() - 2);
-
                 Gson gson = new Gson();
 
-                DeviceType[] devices = gson.fromJson(cropresult, DeviceType[].class);
+                DeviceType devices = gson.fromJson(result, DeviceType.class);
 
                 DeviceLab deviceLab = DeviceLab.get(getActivity());
-                List<DeviceType> devicesTypes = deviceLab.getDeviceTypes();
+                List<DeviceType.types> devicesList = deviceLab.getDeviceTypes();
 
-                for(DeviceType d : devices) {
+                for(DeviceType.types d : devices.getDevices().getTypes()) {
                     d.getTitle();
                     d.getId();
-                    devicesTypes.add(d);
+                    devicesList.add(d);
                 }
 
             } catch (IOException ioe) {
@@ -243,7 +244,7 @@ public class CreateDeviceFragment extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            ArrayAdapter<DeviceType> adapter = new ArrayAdapter<DeviceType>(getActivity(), android.R.layout.simple_spinner_item, mDeviceTypes);
+            ArrayAdapter<DeviceType.types> adapter = new ArrayAdapter<DeviceType.types>(getActivity(), android.R.layout.simple_spinner_item, mDeviceTypes);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mCreateDeviceTypeSpinner.setAdapter(adapter);
             mCreateDeviceTypeSpinner.setEnabled(true);
@@ -287,6 +288,7 @@ public class CreateDeviceFragment extends Fragment {
                 d.setKeyAp(mDeviceKeyApp);
                 d.setTypeTitle(mDeviceTypeTitle);
                 d.setDesc(mDeviceDesc);
+                d.setDeviceTypeId(mDeviceTypeId);
                 d.setCreatedAt(new Date().toString());
                 devicesList.add(0, d);
 

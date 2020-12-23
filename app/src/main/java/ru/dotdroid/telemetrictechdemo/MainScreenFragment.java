@@ -71,6 +71,8 @@ public class MainScreenFragment extends Fragment {
                 Intent intentLogout = new Intent(getActivity(), LoginScreenActivity.class);
                 startActivity(intentLogout);
                 getActivity().finish();
+                DeviceLab deviceLab = DeviceLab.get(getActivity());
+                deviceLab.clearLists();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
