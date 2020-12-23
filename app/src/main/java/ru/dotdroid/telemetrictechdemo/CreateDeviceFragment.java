@@ -21,7 +21,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Date;
@@ -33,8 +32,6 @@ import ru.dotdroid.telemetrictechdemo.devices.Device;
 import ru.dotdroid.telemetrictechdemo.devices.DeviceLab;
 import ru.dotdroid.telemetrictechdemo.devices.DeviceType;
 
-import static android.app.Activity.RESULT_OK;
-
 public class CreateDeviceFragment extends Fragment {
 
     private static final String TAG = "CreateDeviceFragment";
@@ -43,9 +40,7 @@ public class CreateDeviceFragment extends Fragment {
 
     private List<DeviceType.types> mDeviceTypes;
 
-    private String mDeviceEui, mDeviceTitle, mDeviceDesc, mDeviceType, mDeviceTypeTitle,
-            mDeviceKeyApp, mDeviceTypeId;
-
+    private String mDeviceEui, mDeviceTitle, mDeviceDesc, mDeviceType, mDeviceTypeTitle, mDeviceKeyApp;
 
     TextView mCreateDeviceText, mCreateName, mCreateDevEui, mCreateAppKey,  mCreateDesc,  mCreateDeviceType;
     EditText mCreateNameField, mCreateDevEuiField, mCreateAppKeyField, mCreateDescField;
@@ -163,7 +158,6 @@ public class CreateDeviceFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 mDeviceType = mDeviceTypes.get(position).getId();
                 mDeviceTypeTitle = mDeviceTypes.get(position).getTitle();
-                mDeviceTypeId = mDeviceTypes.get(position).getDeviceTypeID();
                 mCreateDeviceTypeSpinner.setTextAlignment(position);
             }
 
@@ -198,7 +192,7 @@ public class CreateDeviceFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.i(TAG, String.valueOf(resultCode));
 
-        if(resultCode == RESULT_OK) {
+        if(resultCode == Activity.RESULT_OK) {
             String devEui = data.getStringExtra(EXTRA_DEVEUI);
             mDeviceEui = devEui;
             mCreateDevEuiField.setText(devEui);
@@ -279,7 +273,6 @@ public class CreateDeviceFragment extends Fragment {
                         .sendPostString("https://dev.telemetric.tech/api.devices.create",
                                 postDataBytes, LoginScreenActivity.sSessionKey,
                                 String.valueOf(postDataBytesLen));
-                Log.i(TAG, result);
 
                 Device d = new Device();
                 DeviceLab deviceLab = DeviceLab.get(getActivity());
@@ -290,7 +283,7 @@ public class CreateDeviceFragment extends Fragment {
                 d.setKeyAp(mDeviceKeyApp);
                 d.setTypeTitle(mDeviceTypeTitle);
                 d.setDesc(mDeviceDesc);
-                d.setDeviceTypeId(mDeviceTypeId);
+                d.setDeviceTypeId(mDeviceType);
                 d.setCreatedAt(new Date().toString());
                 devicesList.add(0, d);
 
