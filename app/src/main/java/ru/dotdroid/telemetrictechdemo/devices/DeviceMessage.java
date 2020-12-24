@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class DeviceWater {
+public class DeviceMessage {
     @SerializedName("messages")
     private List<mMessages> mMessages;
     @SerializedName("timeZone")
@@ -145,7 +145,7 @@ public class DeviceWater {
             return mCode;
         }
 
-        public List<DeviceWater.mAnswer> getAnswer() {
+        public List<DeviceMessage.mAnswer> getAnswer() {
             return mAnswer;
         }
     }
@@ -165,7 +165,7 @@ public class DeviceWater {
         }
     }
 
-    public List<DeviceWater.mMessages> getMessages() {
+    public List<DeviceMessage.mMessages> getMessages() {
         return mMessages;
     }
 
@@ -173,7 +173,7 @@ public class DeviceWater {
         return mTimeZone;
     }
 
-    public DeviceWater.mDebug getDebug() {
+    public DeviceMessage.mDebug getDebug() {
         return mDebug;
     }
 }

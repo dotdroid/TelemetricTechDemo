@@ -13,12 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -127,7 +123,7 @@ public class LoginScreenActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             if(sSessionKey != "") {
-                Intent intent = new Intent(LoginScreenActivity.this, MainScreenActivity.class);
+                Intent intent = new Intent(LoginScreenActivity.this, DeviceListActivity.class);
                 startActivity(intent);
                 finish();
             } else {

@@ -25,9 +25,9 @@ import java.util.Map;
 import ru.dotdroid.telemetrictechdemo.devices.Device;
 import ru.dotdroid.telemetrictechdemo.devices.DeviceLab;
 
-public class MainScreenFragment extends Fragment {
+public class DeviceListFragment extends Fragment {
 
-    final private static String TAG = "MainScreenFragment";
+    final private static String TAG = "DeviceListFragment";
 
     private RecyclerView mAllDevicesRecyclerView;
     private DeviceAdapter mAdapter;
@@ -51,6 +51,8 @@ public class MainScreenFragment extends Fragment {
 
         new getAllDevices().execute();
 
+        Log.i(TAG, "Return to devices list");
+
         return view;
     }
 
@@ -64,7 +66,7 @@ public class MainScreenFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.create_device:
-                Intent intentCreate = new Intent(getActivity(), CreateDeviceActivity.class);
+                Intent intentCreate = new Intent(getActivity(), DeviceCreateActivity.class);
                 startActivity(intentCreate);
                 return true;
             case R.id.logout:
@@ -95,9 +97,6 @@ public class MainScreenFragment extends Fragment {
         } else {
             mAdapter.notifyItemChanged(mLastUpdatedPosition);
         }
-
-        mAdapter = new DeviceAdapter(devices);
-        mAllDevicesRecyclerView.setAdapter(mAdapter);
     }
 
     private class DeviceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -125,6 +124,8 @@ public class MainScreenFragment extends Fragment {
                 mImageView.setImageResource(R.drawable.baza);
             } else if(mDevice.getDeviceTypeId().equals("66")) {
                 mImageView.setImageResource(R.drawable.water);
+            } else {
+                mImageView.setImageResource(R.drawable.plata);
             }
         }
 
@@ -178,12 +179,15 @@ public class MainScreenFragment extends Fragment {
                                 postDataBytes, LoginScreenActivity.sSessionKey,
                                 String.valueOf(postDataBytesLen));
 
+                Log.i(TAG, "Download list");
+
                 Gson gson = new Gson();
 
                 Device[] devices = gson.fromJson(result, Device[].class);
 
                 DeviceLab deviceLab = DeviceLab.get(getActivity());
                 List<Device> devicesList = deviceLab.getDevices();
+                devicesList.clear();
 
                 for(Device d : devices) {
                     d.getTitle();

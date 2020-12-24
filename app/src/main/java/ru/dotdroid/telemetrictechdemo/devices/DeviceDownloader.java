@@ -8,7 +8,6 @@ public class DeviceDownloader<T> extends HandlerThread {
 
     private boolean mHasQuit = false;
 
-
     public DeviceDownloader() {
         super(TAG);
     }

@@ -9,6 +9,7 @@ public class DeviceLab {
     private static DeviceLab sDeviceLab;
     private final List<Device> mDevices;
     private final List<DeviceType.types> mDeviceTypes;
+    private final List<DeviceMessage.mMessages> mDeviceMessages;
 
     private static final String TAG = "DeviceLab";
 
@@ -22,6 +23,7 @@ public class DeviceLab {
     private DeviceLab(Context context) {
         mDevices = new ArrayList<>();
         mDeviceTypes = new ArrayList<>();
+        mDeviceMessages = new ArrayList<>();
     }
 
     public List<Device> getDevices() {
@@ -31,6 +33,7 @@ public class DeviceLab {
     public void clearLists() {
         mDevices.clear();
         mDeviceTypes.clear();
+        mDeviceMessages.clear();
     }
 
     public List<DeviceType.types> getDeviceTypes() {

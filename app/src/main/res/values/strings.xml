@@ -15,4 +15,5 @@
     <string name="create_device_button">Create device</string>
     <string name="scan_qr">Scan QR-code</string>
     <string name="incorrect_pwd">Wrong password!</string>
+    <string name="confirm_delete">Are you sure?</string>
 </resources>

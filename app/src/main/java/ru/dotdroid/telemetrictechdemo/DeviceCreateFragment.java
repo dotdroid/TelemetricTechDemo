@@ -32,7 +32,7 @@ import ru.dotdroid.telemetrictechdemo.devices.Device;
 import ru.dotdroid.telemetrictechdemo.devices.DeviceLab;
 import ru.dotdroid.telemetrictechdemo.devices.DeviceType;
 
-public class CreateDeviceFragment extends Fragment {
+public class DeviceCreateFragment extends Fragment {
 
     private static final String TAG = "CreateDeviceFragment";
     private static final String EXTRA_DEVEUI = "ru.dotdroid.telemetrictechdemo.deviceEui";
@@ -40,7 +40,7 @@ public class CreateDeviceFragment extends Fragment {
 
     private List<DeviceType.types> mDeviceTypes;
 
-    private String mDeviceEui, mDeviceTitle, mDeviceDesc, mDeviceType, mDeviceTypeTitle, mDeviceKeyApp;
+    private String mDeviceEui = "", mDeviceTitle = "", mDeviceDesc = "", mDeviceType = "", mDeviceTypeTitle = "", mDeviceKeyApp = "";
 
     TextView mCreateDeviceText, mCreateName, mCreateDevEui, mCreateAppKey,  mCreateDesc,  mCreateDeviceType;
     EditText mCreateNameField, mCreateDevEuiField, mCreateAppKeyField, mCreateDescField;

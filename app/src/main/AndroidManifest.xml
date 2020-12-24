@@ -13,18 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TelemetricTechDemo">
-        <activity android:name=".SearchScreen"/>
-<!--        <activity android:name=".LoginScreenActivity"/>-->
+        <activity
+            android:name=".DeviceMessagesActivity"
+            android:parentActivityName=".DevicePagerActivity"/>
         <activity
             android:name=".CameraScreenActivity"
-            android:parentActivityName=".CreateDeviceActivity"/>
+            android:parentActivityName=".DeviceCreateActivity"/>
         <activity
-            android:name=".CreateDeviceActivity"
-            android:parentActivityName=".MainScreenActivity"/>
-        <activity android:name=".MainScreenActivity"/>
+            android:name=".DeviceCreateActivity"
+            android:parentActivityName=".DeviceListActivity"/>
+        <activity android:name=".DeviceListActivity"/>
         <activity
             android:name=".DevicePagerActivity"
-            android:parentActivityName=".MainScreenActivity">
+            android:parentActivityName=".DeviceListActivity">
         </activity>
         <activity android:name=".LoginScreenActivity">
             <intent-filter>
