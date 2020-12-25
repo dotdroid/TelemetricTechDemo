@@ -30,8 +30,8 @@ public class CameraScreenActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Intent intent = new Intent();
-                        intent.putExtra(EXTRA_DEVEUI, String.valueOf(result));
-                        if(String.valueOf(result)!=null) {
+                        if(String.valueOf(result) != null) {
+                            intent.putExtra(EXTRA_DEVEUI, String.valueOf(result));
                             setResult(RESULT_OK, intent);
                             finish();
                         } else {

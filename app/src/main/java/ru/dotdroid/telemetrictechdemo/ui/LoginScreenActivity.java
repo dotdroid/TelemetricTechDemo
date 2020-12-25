@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,9 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ru.dotdroid.telemetrictechdemo.R;
+import ru.dotdroid.telemetrictechdemo.utils.ErrorParse;
 import ru.dotdroid.telemetrictechdemo.utils.TelemetricApi;
-
-import static ru.dotdroid.telemetrictechdemo.utils.TelemetricApi.*;
 
 public class LoginScreenActivity extends AppCompatActivity {
 
@@ -74,11 +74,9 @@ public class LoginScreenActivity extends AppCompatActivity {
 
         mLogInButton = findViewById(R.id.login_button);
         mLogInButton.setText("Log in");
-        mLogInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                new connectToUrl().execute();
+        mLogInButton.setOnClickListener(v -> {
+            if(validateField()) {
+                new sendLogin().execute();
             }
         });
     }
@@ -89,23 +87,46 @@ public class LoginScreenActivity extends AppCompatActivity {
         sSessionKey = "";
     }
 
-    private class connectToUrl extends AsyncTask<Void, Void, Void> {
+    public boolean validateField() {
+        boolean valid = true;
+
+        if (mEmail.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()) {
+            mEmailTextViewField.setError("Enter a valid email address");
+            valid = false;
+        } else {
+            mEmailTextViewField.setError(null);
+        }
+
+        if (mPassword.isEmpty() || mPassword.length() < 6) {
+            mPasswordTextViewField.setError("Password must be 6 or more characters");
+            valid = false;
+        } else {
+            mPasswordTextViewField.setError(null);
+        }
+
+        return valid;
+    }
+
+    private class sendLogin extends AsyncTask<Void, Void, Void> {
+
+        private int mError = 0;
 
         @Override
         protected Void doInBackground(Void... params) {
-            sendLogin(mEmail, mPassword);
+            int responseLogin = TelemetricApi.sendLogin(mEmail, mPassword);
+            mError = responseLogin;
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            if(TelemetricApi.sSessionKey != "") {
+            if(mError == 0) {
                 Intent intent = new Intent(LoginScreenActivity.this, DeviceListActivity.class);
                 startActivity(intent);
                 finish();
             } else {
-                Toast.makeText(getApplicationContext(), R.string.incorrect_pwd,Toast.LENGTH_SHORT).show();
+                ErrorParse.errorToast(LoginScreenActivity.this, mError);
             }
         }
     }

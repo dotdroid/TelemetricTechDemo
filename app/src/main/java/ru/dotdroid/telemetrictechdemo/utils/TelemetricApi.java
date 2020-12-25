@@ -19,9 +19,10 @@ public class TelemetricApi {
 
     public static String sSessionKey;
 
-    public static void sendLogin(String email, String password) {
+    public static int sendLogin(String email, String password) {
 
         String key = "";
+        int mError = 0;
 
         try {
             String md5Auth = new Md5Util().md5Custom(email + password);
@@ -39,12 +40,17 @@ public class TelemetricApi {
 
             Response login = new Gson().fromJson(result, Response.class);
 
-            if(login.getError() == null) sSessionKey = login.getSessionKey();
+            if(login.getError() == null) {
+                sSessionKey = login.getSessionKey();
+            } else {
+                mError = login.getError().getCode();
+            }
 
         } catch (
                 IOException ioe) {
             Log.e(TAG, "Failed to fetch URL: ", ioe);
         }
+        return mError;
     }
 
     public static void getDevices(Context context) {
@@ -117,10 +123,12 @@ public class TelemetricApi {
         }
     }
 
-    public static void createDevice(Context context, String devEui, String deviceGateway,
+    public static String createDevice(Context context, String devEui, String deviceGateway,
                                     String gatewayId, String insideAddr, String deviceTitle,
                                     String deviceDesc, String deviceType, String keyAp,
                                     String  keyNw) {
+
+        String resultCreate = "";
 
         try {
             Map<String, String> postData = new HashMap<>();
@@ -143,14 +151,19 @@ public class TelemetricApi {
                             postDataBytes, sSessionKey,
                             String.valueOf(postDataBytesLen));
 
+            resultCreate = result;
             getDevices(context);
 
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to fetch URL: ", ioe);
         }
+
+        return resultCreate;
     }
 
-    public static void deleteDevice(Context context, String devEui) {
+    public static String deleteDevice(Context context, String devEui) {
+
+        String resultDelete = "";
 
         try {
             Map<String, String> postData = new HashMap<>();
@@ -165,14 +178,14 @@ public class TelemetricApi {
                             postDataBytes, sSessionKey,
                             String.valueOf(postDataBytesLen));
 
-            Gson gson = new Gson();
-            Response response = gson.fromJson(result, Response.class);
+            resultDelete = result;
 
             getDevices(context);
 
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to fetch URL: ", ioe);
         }
+        return resultDelete;
     }
 
     public static void getMessages(String devId) {

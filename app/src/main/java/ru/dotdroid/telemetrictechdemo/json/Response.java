@@ -3,7 +3,6 @@ package ru.dotdroid.telemetrictechdemo.json;
 import com.google.gson.annotations.SerializedName;
 
 public class Response {
-
     @SerializedName("sessionKey")
     private String mSessionKey;
     @SerializedName("login")
@@ -12,41 +11,31 @@ public class Response {
     private Error mError;
     @SerializedName("api")
     private Api mApi;
+    @SerializedName("result")
+    private Result mResult;
 
-    class Error{
+    public class Error{
         @SerializedName("code")
-        private String mCode;
+        private int mCode;
         @SerializedName("message")
         private String mMessage;
         @SerializedName("logout")
         private String mLogout;
 
-        public String getCode() {
+        public int getCode() {
             return mCode;
-        }
-
-        public void setCode(String code) {
-            mCode = code;
         }
 
         public String getMessage() {
             return mMessage;
         }
 
-        public void setMessage(String message) {
-            mMessage = message;
-        }
-
         public String getLogout() {
             return mLogout;
         }
-
-        public void setLogout(String logout) {
-            mLogout = logout;
-        }
     }
 
-    class Api {
+    public class Api {
         @SerializedName("code")
         private int mCode;
         @SerializedName("url")
@@ -67,35 +56,105 @@ public class Response {
         }
     }
 
-    public String getSessionKey() {
-        return mSessionKey;
+     public class Result {
+        @SerializedName("code")
+        private int mCode;
+        @SerializedName("response")
+        private CreateResponseMessage mResponse;
+        @SerializedName("url")
+        public String mUrl;
+        @SerializedName("method")
+        public String mId;
+        @SerializedName("newId")
+        public String mNewId;
+
+        public int getCode() {
+            return mCode;
+        }
+
+        public CreateResponseMessage getResponse() {
+            return mResponse;
+        }
+
+        public String getUrl() {
+            return mUrl;
+        }
+
+        public String getId() {
+            return mId;
+        }
+
+        public String getNewId() {
+            return mNewId;
+        }
+
+         public void setApi(Api api) {
+             mApi = api;
+         }
+     }
+
+    public class CreateResponseMessage {
+        @SerializedName("applicationID")
+        public String mApplicationID;
+        @SerializedName("devEUI")
+        public String mDevEui;
+        @SerializedName("name")
+        public String mName;
+        @SerializedName("description")
+        public String mDescription;
+        @SerializedName("deviceProfileID")
+        public String mDeviceProfileID;
+        @SerializedName("referenceAltitude")
+        public String mReferenceAltitude;
+        @SerializedName("skipFCntCheck")
+        public String mSkipFCntCheck;
+
+        public String getApplicationID() {
+            return mApplicationID;
+        }
+
+        public String getDevEui() {
+            return mDevEui;
+        }
+
+        public String getName() {
+            return mName;
+        }
+
+        public String getDescription() {
+            return mDescription;
+        }
+
+        public String getDeviceProfileID() {
+            return mDeviceProfileID;
+        }
+
+        public String getReferenceAltitude() {
+            return mReferenceAltitude;
+        }
+
+        public String getSkipFCntCheck() {
+            return mSkipFCntCheck;
+        }
     }
 
-    public void setSessionKey(String sessionKey) {
-        mSessionKey = sessionKey;
+    public String getSessionKey() {
+        return mSessionKey;
     }
 
     public String getLogin() {
         return mLogin;
     }
 
-    public void setLogin(String login) {
-        mLogin = login;
-    }
-
     public Error getError() {
         return mError;
-    }
-
-    public void setError(Error error) {
-        mError = error;
     }
 
     public Api getApi() {
         return mApi;
     }
 
-    public void setApi(Api api) {
-        mApi = api;
+    public Result getResult() {
+        return mResult;
     }
 }

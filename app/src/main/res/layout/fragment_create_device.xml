@@ -37,6 +37,7 @@
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:inputType="text"
+        android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/create_name_text" />
@@ -59,13 +60,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:ems="10"
-        android:inputType="textPersonName"
-        android:textSize="14sp"
+        android:inputType="text"
+        android:maxLength="16"
+        android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create_deveui_text"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/create_deveui_text" />
 
     <TextView
         android:id="@+id/create_appkey"
@@ -84,13 +86,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:ems="10"
-        android:inputType="textPersonName"
-        android:textSize="14sp"
+        android:inputType="text"
+        android:maxLength="32"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create_appkey"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/create_appkey" />
 
     <TextView
         android:id="@+id/create_desc"
@@ -112,9 +114,9 @@
         android:layout_marginEnd="16dp"
         android:autofillHints=""
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="text"
         android:labelFor="@id/create_desc"
-        android:textSize="14sp"
+        android:minLines="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/create_desc" />

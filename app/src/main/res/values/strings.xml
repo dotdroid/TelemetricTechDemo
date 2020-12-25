@@ -16,4 +16,8 @@
     <string name="scan_qr">Scan QR-code</string>
     <string name="incorrect_pwd">Wrong password!</string>
     <string name="confirm_delete">Are you sure?</string>
+    <string name="email_error">Enter a valid email address</string>
+    <string name="password_error">Password must be 4 or more characters</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

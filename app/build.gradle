@@ -40,4 +40,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.budiyev.android:code-scanner:2.1.0'
+    implementation "io.reactivex.rxjava3:rxjava:3.0.8"
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 }

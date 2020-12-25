@@ -14,12 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import ru.dotdroid.telemetrictechdemo.R;
 import ru.dotdroid.telemetrictechdemo.json.Device;
+import ru.dotdroid.telemetrictechdemo.json.Response;
 import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
-
-import static ru.dotdroid.telemetrictechdemo.utils.TelemetricApi.*;
+import ru.dotdroid.telemetrictechdemo.utils.ErrorParse;
+import ru.dotdroid.telemetrictechdemo.utils.TelemetricApi;
 
 public class DeviceFragment extends Fragment {
 
@@ -48,9 +52,6 @@ public class DeviceFragment extends Fragment {
         super.onCreate(savedInstanceState);
         String deviceEui = (String) getArguments().getSerializable(ARG_DEVICE_EUI);
         mDevice = DeviceLab.get(getActivity()).getDevice(deviceEui);
-
-        setHasOptionsMenu(true);
-        setRetainInstance(true);
     }
 
     @Override
@@ -64,15 +65,15 @@ public class DeviceFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.delete_device:
                 new AlertDialog.Builder(getContext())
-                        .setTitle(R.string.confirm_delete)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        .setMessage(R.string.confirm_delete)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                new deleteDevice().execute();
                                 dialogInterface.dismiss();
                             }
                         })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
@@ -89,6 +90,9 @@ public class DeviceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View viewForFragment = inflater.inflate(R.layout.fragment_device, container, false);
+
+        setHasOptionsMenu(true);
+        setRetainInstance(true);
 
         mTitleTextView = (TextView) viewForFragment.findViewById(R.id.device_title);
         mTitleTextView.setText(mDevice.getTitle());
@@ -123,11 +127,21 @@ public class DeviceFragment extends Fragment {
 
     private class deleteDevice extends AsyncTask<Void, Void, Void> {
 
+        private int mError = 0;
+
         @Override
         protected Void doInBackground(Void... params) {
 
-            deleteDevice(getContext(), mDevice.getId());
+            String responseDelete = TelemetricApi.deleteDevice(getContext(), mDevice.getId());
 
+            Gson gson = new Gson();
+            Response response = gson.fromJson(responseDelete, Response.class);
+
+            if(response.getError() == null) {
+                mError = 0;
+            } else {
+                mError = response.getError().getCode();
+            }
             return null;
         }
 
@@ -135,6 +149,11 @@ public class DeviceFragment extends Fragment {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
                 getActivity().finish();
+            if(mError == 0) {
+                getActivity().finish();
+            } else {
+                ErrorParse.errorToast(getContext(), mError);
+            }
         }
     }
 }

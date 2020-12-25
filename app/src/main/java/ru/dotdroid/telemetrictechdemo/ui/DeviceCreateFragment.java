@@ -22,13 +22,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
 import ru.dotdroid.telemetrictechdemo.R;
+import ru.dotdroid.telemetrictechdemo.json.Response;
 import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
 import ru.dotdroid.telemetrictechdemo.json.DeviceType;
-
-import static ru.dotdroid.telemetrictechdemo.utils.TelemetricApi.*;
+import ru.dotdroid.telemetrictechdemo.utils.ErrorParse;
+import ru.dotdroid.telemetrictechdemo.utils.TelemetricApi;
 
 public class DeviceCreateFragment extends Fragment {
 
@@ -38,7 +41,7 @@ public class DeviceCreateFragment extends Fragment {
 
     private List<DeviceType.Types> mDeviceTypes;
 
-    private String mDeviceEui = "", mDeviceTitle = "", mDeviceDesc = "", mDeviceType = "", mDeviceTypeTitle = "", mDeviceKeyApp = "";
+    private String mDeviceEui = "", mDeviceTitle = "", mDeviceDesc = "", mDeviceType = "", mDeviceKeyApp = "";
 
     TextView mCreateDeviceText, mCreateName, mCreateDevEui, mCreateAppKey,  mCreateDesc,  mCreateDeviceType;
     EditText mCreateNameField, mCreateDevEuiField, mCreateAppKeyField, mCreateDescField;
@@ -74,15 +77,12 @@ public class DeviceCreateFragment extends Fragment {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 mDeviceTitle = charSequence.toString();
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
         mCreateDevEuiField = (EditText) view.findViewById(R.id.create_deveui_field);
@@ -90,7 +90,6 @@ public class DeviceCreateFragment extends Fragment {
         mCreateDevEuiField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -100,14 +99,12 @@ public class DeviceCreateFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
         mCreateAppKeyField = (EditText) view.findViewById(R.id.create_appkey_field);
         mCreateAppKeyField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -117,14 +114,12 @@ public class DeviceCreateFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
         mCreateDescField = (EditText) view.findViewById(R.id.create_desc_field);
         mCreateDescField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -134,18 +129,12 @@ public class DeviceCreateFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
 
         mCreateDevice = (Button) view.findViewById(R.id.create_device_button);
         mCreateDevice.setText(R.string.create_device_button);
-        mCreateDevice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new createDevice().execute();
-            }
-        });
+        mCreateDevice.setOnClickListener(view1 -> new createDevice().execute());
 
 
         mCreateDeviceTypeSpinner = (Spinner) view.findViewById(R.id.create_device_type_spinner);
@@ -155,16 +144,12 @@ public class DeviceCreateFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 mDeviceType = mDeviceTypes.get(position).getId();
-                mDeviceTypeTitle = mDeviceTypes.get(position).getTitle();
                 mCreateDeviceTypeSpinner.setTextAlignment(position);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
-
         return view;
     }
 
@@ -202,7 +187,7 @@ public class DeviceCreateFragment extends Fragment {
     private class getAllDevicesTypes extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            getDevicesTypes(getContext());
+            TelemetricApi.getDevicesTypes(getContext());
             return null;
         }
         @Override
@@ -217,16 +202,32 @@ public class DeviceCreateFragment extends Fragment {
     }
 
     private class createDevice extends AsyncTask<Void, Void, Void> {
+
+        private int mError = 0;
+
         @Override
         protected Void doInBackground(Void... params) {
-            createDevice(getContext(), mDeviceEui, "", "", "",
+            String resultCreate = TelemetricApi.createDevice(getContext(), mDeviceEui, "", "", "",
                     mDeviceTitle, mDeviceDesc, mDeviceType, mDeviceKeyApp, "");
+
+            Gson gson = new Gson();
+            Response responseCreate = gson.fromJson(resultCreate, Response.class);
+            if(responseCreate.getError() == null) {
+                mError = 0;
+            } else {
+                mError = responseCreate.getError().getCode();
+            }
+
             return null;
         }
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            getActivity().finish();
+            if(mError == 0) {
+                getActivity().finish();
+            } else {
+                ErrorParse.errorToast(getContext(), mError);
+            }
         }
     }
 }

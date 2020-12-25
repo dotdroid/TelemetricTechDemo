@@ -16,13 +16,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.List;
 
 import ru.dotdroid.telemetrictechdemo.R;
 import ru.dotdroid.telemetrictechdemo.json.Device;
 import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
-
-import static ru.dotdroid.telemetrictechdemo.utils.TelemetricApi.*;
+import ru.dotdroid.telemetrictechdemo.utils.TelemetricApi;
 
 public class DeviceListFragment extends Fragment {
 
@@ -30,7 +30,6 @@ public class DeviceListFragment extends Fragment {
 
     private RecyclerView mAllDevicesRecyclerView;
     private DeviceAdapter mAdapter;
-    private int mLastUpdatedPosition;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,7 +93,7 @@ public class DeviceListFragment extends Fragment {
 
     private class DeviceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView mTitleTextView, mDevEUITextView;
-        private final ImageView mImageView;
+        private final ImageView mDeviceImageView, mStatusImageView;
 
         private Device mDevice;
 
@@ -104,33 +103,46 @@ public class DeviceListFragment extends Fragment {
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_title);
             mDevEUITextView = (TextView) itemView.findViewById(R.id.list_item_deveui);
-            mImageView = (ImageView) itemView.findViewById(R.id.list_device_image);
+            mDeviceImageView = (ImageView) itemView.findViewById(R.id.list_device_image);
+            mStatusImageView = (ImageView) itemView.findViewById(R.id.list_online_indicator);
+
         }
 
         public void bind(Device device) {
             mDevice = device;
             mTitleTextView.setText(mDevice.getTitle());
             mDevEUITextView.setText(mDevice.getDeviceEui());
+
             if(mDevice.getDeviceTypeId().equals("17")){
-                mImageView.setImageResource(R.drawable.electro);
+                mDeviceImageView.setImageResource(R.drawable.electro);
             } else if(mDevice.getDeviceTypeId().equals("53")) {
-                mImageView.setImageResource(R.drawable.baza);
+                mDeviceImageView.setImageResource(R.drawable.baza);
             } else if(mDevice.getDeviceTypeId().equals("66")) {
-                mImageView.setImageResource(R.drawable.water);
+                mDeviceImageView.setImageResource(R.drawable.water);
             } else {
-                mImageView.setImageResource(R.drawable.plata);
+                mDeviceImageView.setImageResource(R.drawable.plata);
+            }
+
+            long currentTime = Calendar.getInstance().getTimeInMillis() / 1000L;
+
+            if((currentTime - Long.parseLong(mDevice.getLastActive()) < Long.parseLong(mDevice.getReportPeriodUpdate()))) {
+                mStatusImageView.setImageResource(R.drawable.circle_green);
+            } else if (Long.parseLong(mDevice.getLastActive()) == 0) {
+                mStatusImageView.setImageResource(R.drawable.circle_white);
+            } else {
+                mStatusImageView.setImageResource(R.drawable.circle_red);
             }
         }
 
         @Override
         public void onClick(View view) {
             Intent intent = DevicePagerActivity.newIntent(getActivity(), mDevice.getDeviceEui());
-            mLastUpdatedPosition = this.getAdapterPosition();
             startActivity(intent);
         }
     }
 
     private class DeviceAdapter extends RecyclerView.Adapter<DeviceHolder> {
+
         private final List<Device> mDevices;
 
         public DeviceAdapter(List<Device> devices) {
@@ -159,7 +171,7 @@ public class DeviceListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            getDevices(getActivity());
+            TelemetricApi.getDevices(getActivity());
             return null;
         }
 
