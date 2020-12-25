@@ -90,14 +90,14 @@ public class LoginScreenActivity extends AppCompatActivity {
     public boolean validateField() {
         boolean valid = true;
 
-        if (mEmail.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()) {
+        if (mEmail == null || !Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()) {
             mEmailTextViewField.setError("Enter a valid email address");
             valid = false;
         } else {
             mEmailTextViewField.setError(null);
         }
 
-        if (mPassword.isEmpty() || mPassword.length() < 6) {
+        if (mPassword == null || mPassword.length() < 6) {
             mPasswordTextViewField.setError("Password must be 6 or more characters");
             valid = false;
         } else {

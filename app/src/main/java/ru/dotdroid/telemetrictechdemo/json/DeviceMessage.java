@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class DeviceMessage {
+public class DeviceMessage extends Device {
     @SerializedName("messages")
     private List<Messages> mMessages;
     @SerializedName("timeZone")
