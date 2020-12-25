@@ -14,20 +14,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TelemetricTechDemo">
         <activity
-            android:name=".DeviceMessagesActivity"
-            android:parentActivityName=".DevicePagerActivity"/>
+            android:name=".ui.DeviceMessagesActivity"
+            android:parentActivityName=".ui.DevicePagerActivity"/>
         <activity
-            android:name=".CameraScreenActivity"
-            android:parentActivityName=".DeviceCreateActivity"/>
+            android:name=".ui.CameraScreenActivity"
+            android:parentActivityName=".ui.DeviceCreateActivity"/>
         <activity
-            android:name=".DeviceCreateActivity"
-            android:parentActivityName=".DeviceListActivity"/>
-        <activity android:name=".DeviceListActivity"/>
+            android:name=".ui.DeviceCreateActivity"
+            android:parentActivityName=".ui.DeviceListActivity"/>
+        <activity android:name=".ui.DeviceListActivity"/>
         <activity
-            android:name=".DevicePagerActivity"
-            android:parentActivityName=".DeviceListActivity">
+            android:name=".ui.DevicePagerActivity"
+            android:parentActivityName=".ui.DeviceListActivity">
         </activity>
-        <activity android:name=".LoginScreenActivity">
+        <activity android:name=".ui.LoginScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

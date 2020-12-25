@@ -1,4 +1,4 @@
-package ru.dotdroid.telemetrictechdemo;
+package ru.dotdroid.telemetrictechdemo.ui;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -15,15 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import ru.dotdroid.telemetrictechdemo.devices.Device;
-import ru.dotdroid.telemetrictechdemo.devices.DeviceLab;
+import ru.dotdroid.telemetrictechdemo.R;
+import ru.dotdroid.telemetrictechdemo.json.Device;
+import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
+
+import static ru.dotdroid.telemetrictechdemo.utils.TelemetricApi.*;
 
 public class DeviceListFragment extends Fragment {
 
@@ -36,12 +35,6 @@ public class DeviceListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_screen, container, false);
-
-        if(LoginScreenActivity.sSessionKey.equals("")) {
-            getActivity().finish();
-            Intent intent = new Intent(getContext(), LoginScreenActivity.class);
-            startActivity(intent);
-        }
 
         setHasOptionsMenu(true);
         setRetainInstance(true);
@@ -95,7 +88,7 @@ public class DeviceListFragment extends Fragment {
             mAdapter = new DeviceAdapter(devices);
             mAllDevicesRecyclerView.setAdapter(mAdapter);
         } else {
-            mAdapter.notifyItemChanged(mLastUpdatedPosition);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -166,44 +159,7 @@ public class DeviceListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-
-            try {
-                Map<String, String> postData = new HashMap<>();
-                PostParamBuild postDataBuild = new PostParamBuild();
-
-                byte[] postDataBytes = postDataBuild.postParBuilder(postData).getBytes();
-                int postDataBytesLen = postDataBytes.length;
-
-                String result = new SendPost()
-                        .sendPostString("https://dev.telemetric.tech/api.devices.all",
-                                postDataBytes, LoginScreenActivity.sSessionKey,
-                                String.valueOf(postDataBytesLen));
-
-                Log.i(TAG, "Download list");
-
-                Gson gson = new Gson();
-
-                Device[] devices = gson.fromJson(result, Device[].class);
-
-                DeviceLab deviceLab = DeviceLab.get(getActivity());
-                List<Device> devicesList = deviceLab.getDevices();
-                devicesList.clear();
-
-                for(Device d : devices) {
-                    d.getTitle();
-                    d.getDeviceEui();
-                    d.getKeyAp();
-                    d.getTypeTitle();
-                    d.getDesc();
-                    d.getCreatedAt();
-                    d.getLastMessage();
-                    d.getLastActive();
-                    devicesList.add(d);
-                }
-
-            } catch (IOException ioe) {
-                Log.e(TAG, "Failed to fetch URL: ", ioe);
-            }
+            getDevices(getActivity());
             return null;
         }
 

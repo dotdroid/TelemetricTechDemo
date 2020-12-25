@@ -1,8 +1,8 @@
-package ru.dotdroid.telemetrictechdemo;
+package ru.dotdroid.telemetrictechdemo.ui;
 
 import android.support.v4.app.Fragment;
 
-public class DeviceCreateActivity extends SingleFragmentActivity{
+public class DeviceCreateActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {

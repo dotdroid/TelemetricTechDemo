@@ -1,4 +1,4 @@
-package ru.dotdroid.telemetrictechdemo;
+package ru.dotdroid.telemetrictechdemo.ui;
 
 import android.support.v4.app.Fragment;
 

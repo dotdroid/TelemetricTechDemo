@@ -1,10 +1,12 @@
-package ru.dotdroid.telemetrictechdemo;
+package ru.dotdroid.telemetrictechdemo.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import ru.dotdroid.telemetrictechdemo.R;
 
 public class DeviceMessagesFragment extends Fragment {
 

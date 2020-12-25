@@ -1,4 +1,4 @@
-package ru.dotdroid.telemetrictechdemo;
+package ru.dotdroid.telemetrictechdemo.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,16 +21,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.gson.Gson;
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import ru.dotdroid.telemetrictechdemo.devices.Device;
-import ru.dotdroid.telemetrictechdemo.devices.DeviceLab;
-import ru.dotdroid.telemetrictechdemo.devices.DeviceType;
+import java.util.List;
+
+import ru.dotdroid.telemetrictechdemo.R;
+import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
+import ru.dotdroid.telemetrictechdemo.json.DeviceType;
+
+import static ru.dotdroid.telemetrictechdemo.utils.TelemetricApi.*;
 
 public class DeviceCreateFragment extends Fragment {
 
@@ -38,7 +36,7 @@ public class DeviceCreateFragment extends Fragment {
     private static final String EXTRA_DEVEUI = "ru.dotdroid.telemetrictechdemo.deviceEui";
     private static final int REQUEST_DEVEUI = 0;
 
-    private List<DeviceType.types> mDeviceTypes;
+    private List<DeviceType.Types> mDeviceTypes;
 
     private String mDeviceEui = "", mDeviceTitle = "", mDeviceDesc = "", mDeviceType = "", mDeviceTypeTitle = "", mDeviceKeyApp = "";
 
@@ -202,45 +200,15 @@ public class DeviceCreateFragment extends Fragment {
     }
 
     private class getAllDevicesTypes extends AsyncTask<Void, Void, Void> {
-
         @Override
         protected Void doInBackground(Void... params) {
-
-            try {
-                Map<String, String> postData = new HashMap<>();
-                PostParamBuild postDataBuild = new PostParamBuild();
-
-                byte[] postDataBytes = postDataBuild.postParBuilder(postData).getBytes();
-                int postDataBytesLen = postDataBytes.length;
-
-                String result = new SendPost()
-                        .sendPostString("https://dev.telemetric.tech/api.devices.types",
-                                postDataBytes, LoginScreenActivity.sSessionKey,
-                                String.valueOf(postDataBytesLen));
-
-                Gson gson = new Gson();
-
-                DeviceType devices = gson.fromJson(result, DeviceType.class);
-
-                DeviceLab deviceLab = DeviceLab.get(getActivity());
-                List<DeviceType.types> devicesList = deviceLab.getDeviceTypes();
-
-                for(DeviceType.types d : devices.getDevices().getTypes()) {
-                    d.getTitle();
-                    d.getId();
-                    devicesList.add(d);
-                }
-
-            } catch (IOException ioe) {
-                Log.e(TAG, "Failed to fetch URL: ", ioe);
-            }
+            getDevicesTypes(getContext());
             return null;
         }
-
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            ArrayAdapter<DeviceType.types> adapter = new ArrayAdapter<DeviceType.types>(getActivity(), android.R.layout.simple_spinner_item, mDeviceTypes);
+            ArrayAdapter<DeviceType.Types> adapter = new ArrayAdapter<DeviceType.Types>(getActivity(), android.R.layout.simple_spinner_item, mDeviceTypes);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mCreateDeviceTypeSpinner.setAdapter(adapter);
             mCreateDeviceTypeSpinner.setEnabled(true);
@@ -249,50 +217,12 @@ public class DeviceCreateFragment extends Fragment {
     }
 
     private class createDevice extends AsyncTask<Void, Void, Void> {
-
         @Override
         protected Void doInBackground(Void... params) {
-
-            try {
-                Map<String, String> postData = new HashMap<>();
-                postData.put("deviceID", mDeviceEui);
-                postData.put("deviceGateway", "");
-                postData.put("gatewayID", "");
-                postData.put("inside_addr", "");
-                postData.put("deviceTitle", mDeviceTitle);
-                postData.put("deviceDesc", mDeviceDesc);
-                postData.put("deviceType", mDeviceType);
-                postData.put("keyAp", mDeviceKeyApp);
-                postData.put("keyNw", "");
-                PostParamBuild postDataBuild = new PostParamBuild();
-
-                byte[] postDataBytes = postDataBuild.postParBuilder(postData).getBytes();
-                int postDataBytesLen = postDataBytes.length;
-
-                String result = new SendPost()
-                        .sendPostString("https://dev.telemetric.tech/api.devices.create",
-                                postDataBytes, LoginScreenActivity.sSessionKey,
-                                String.valueOf(postDataBytesLen));
-
-                Device d = new Device();
-                DeviceLab deviceLab = DeviceLab.get(getActivity());
-                List<Device> devicesList = deviceLab.getDevices();
-
-                d.setTitle(mDeviceTitle);
-                d.setDeviceEui(mDeviceEui);
-                d.setKeyAp(mDeviceKeyApp);
-                d.setTypeTitle(mDeviceTypeTitle);
-                d.setDesc(mDeviceDesc);
-                d.setDeviceTypeId(mDeviceType);
-                d.setCreatedAt(new Date().toString());
-                devicesList.add(0, d);
-
-            } catch (IOException ioe) {
-                Log.e(TAG, "Failed to fetch URL: ", ioe);
-            }
+            createDevice(getContext(), mDeviceEui, "", "", "",
+                    mDeviceTitle, mDeviceDesc, mDeviceType, mDeviceKeyApp, "");
             return null;
         }
-
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);

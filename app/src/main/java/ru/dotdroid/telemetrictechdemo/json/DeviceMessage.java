@@ -1,4 +1,4 @@
-package ru.dotdroid.telemetrictechdemo.devices;
+package ru.dotdroid.telemetrictechdemo.json;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -6,13 +6,13 @@ import java.util.List;
 
 public class DeviceMessage {
     @SerializedName("messages")
-    private List<mMessages> mMessages;
+    private List<Messages> mMessages;
     @SerializedName("timeZone")
     private String mTimeZone;
     @SerializedName("debug")
-    private mDebug mDebug;
+    private Debug mDebug;
 
-    class mMessages {
+    public class Messages {
         @SerializedName("loRaSNR")
         private double mLoRaSnr;
         @SerializedName("datetime")
@@ -135,22 +135,22 @@ public class DeviceMessage {
         }
     }
 
-    class mDebug {
+    public class Debug {
         @SerializedName("code")
         private String mCode;
         @SerializedName("answer")
-        private List<mAnswer> mAnswer;
+        private List<Answer> mAnswer;
 
         public String getCode() {
             return mCode;
         }
 
-        public List<DeviceMessage.mAnswer> getAnswer() {
+        public List<DeviceMessage.Answer> getAnswer() {
             return mAnswer;
         }
     }
 
-    class mAnswer {
+    public class Answer {
         @SerializedName("datetime")
         private String mDatetime;
         @SerializedName("message")
@@ -165,7 +165,7 @@ public class DeviceMessage {
         }
     }
 
-    public List<DeviceMessage.mMessages> getMessages() {
+    public List<DeviceMessage.Messages> getMessages() {
         return mMessages;
     }
 
@@ -173,7 +173,7 @@ public class DeviceMessage {
         return mTimeZone;
     }
 
-    public DeviceMessage.mDebug getDebug() {
+    public DeviceMessage.Debug getDebug() {
         return mDebug;
     }
 }

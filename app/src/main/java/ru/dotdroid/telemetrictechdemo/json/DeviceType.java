@@ -1,4 +1,4 @@
-package ru.dotdroid.telemetrictechdemo.devices;
+package ru.dotdroid.telemetrictechdemo.json;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -6,19 +6,19 @@ import java.util.List;
 
 public class DeviceType {
     @SerializedName("devices")
-    private types mDevices;
+    private Types mDevices;
 
-    public types getDevices() {
+    public Types getDevices() {
         return mDevices;
     }
 
-    public void setDevices(types devices) {
+    public void setDevices(Types devices) {
         mDevices = devices;
     }
 
-    public class types {
+    public class Types {
         @SerializedName("types")
-        private List<types> mTypes;
+        private List<Types> mTypes;
         @SerializedName("id")
         private String mId;
         @SerializedName("deviceTypeID")
@@ -59,11 +59,11 @@ public class DeviceType {
             return mTitle;
         }
 
-        public List<types> getTypes() {
+        public List<Types> getTypes() {
             return mTypes;
         }
 
-        public void setTypes(List<types> types) {
+        public void setTypes(List<Types> types) {
             mTypes = types;
         }
 

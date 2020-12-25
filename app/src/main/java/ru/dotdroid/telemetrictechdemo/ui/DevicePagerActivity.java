@@ -1,4 +1,4 @@
-package ru.dotdroid.telemetrictechdemo;
+package ru.dotdroid.telemetrictechdemo.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
 
-import ru.dotdroid.telemetrictechdemo.devices.Device;
-import ru.dotdroid.telemetrictechdemo.devices.DeviceLab;
+import ru.dotdroid.telemetrictechdemo.R;
+import ru.dotdroid.telemetrictechdemo.json.Device;
+import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
 
 public class DevicePagerActivity extends AppCompatActivity {
 

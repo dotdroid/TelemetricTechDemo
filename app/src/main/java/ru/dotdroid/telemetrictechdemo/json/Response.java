@@ -1,4 +1,4 @@
-package ru.dotdroid.telemetrictechdemo;
+package ru.dotdroid.telemetrictechdemo.json;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,11 +9,11 @@ public class Response {
     @SerializedName("login")
     private String mLogin;
     @SerializedName("error")
-    private error mError;
+    private Error mError;
     @SerializedName("api")
-    private api mApi;
+    private Api mApi;
 
-    class error{
+    class Error{
         @SerializedName("code")
         private String mCode;
         @SerializedName("message")
@@ -46,7 +46,7 @@ public class Response {
         }
     }
 
-    class api {
+    class Api {
         @SerializedName("code")
         private int mCode;
         @SerializedName("url")
@@ -83,19 +83,19 @@ public class Response {
         mLogin = login;
     }
 
-    public error getError() {
+    public Error getError() {
         return mError;
     }
 
-    public void setError(error error) {
+    public void setError(Error error) {
         mError = error;
     }
 
-    public api getApi() {
+    public Api getApi() {
         return mApi;
     }
 
-    public void setApi(api api) {
+    public void setApi(Api api) {
         mApi = api;
     }
 }

@@ -1,4 +1,4 @@
-package ru.dotdroid.telemetrictechdemo;
+package ru.dotdroid.telemetrictechdemo.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

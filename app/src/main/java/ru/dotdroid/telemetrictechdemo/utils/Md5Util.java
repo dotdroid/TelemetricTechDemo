@@ -1,4 +1,4 @@
-package ru.dotdroid.telemetrictechdemo;
+package ru.dotdroid.telemetrictechdemo.utils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

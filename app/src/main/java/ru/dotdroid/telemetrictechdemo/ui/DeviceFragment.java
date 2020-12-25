@@ -1,4 +1,4 @@
-package ru.dotdroid.telemetrictechdemo;
+package ru.dotdroid.telemetrictechdemo.ui;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,16 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import ru.dotdroid.telemetrictechdemo.R;
+import ru.dotdroid.telemetrictechdemo.json.Device;
+import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
 
-import ru.dotdroid.telemetrictechdemo.devices.Device;
-import ru.dotdroid.telemetrictechdemo.devices.DeviceLab;
+import static ru.dotdroid.telemetrictechdemo.utils.TelemetricApi.*;
 
 public class DeviceFragment extends Fragment {
 
@@ -131,57 +126,15 @@ public class DeviceFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            try {
-                Map<String, String> postData = new HashMap<>();
-                postData.put("deviceId", mDevice.getId());
-                PostParamBuild postDataBuild = new PostParamBuild();
+            deleteDevice(getContext(), mDevice.getId());
 
-                byte[] postDataBytes = postDataBuild.postParBuilder(postData).getBytes();
-                int postDataBytesLen = postDataBytes.length;
-
-                String result = new SendPost()
-                        .sendPostString("https://dev.telemetric.tech/api.devices.remove",
-                                postDataBytes, LoginScreenActivity.sSessionKey,
-                                String.valueOf(postDataBytesLen));
-
-                Gson gson = new Gson();
-
-                Response response = gson.fromJson(result, Response.class);
-
-                Log.i(TAG, response.getApi().getDelete());
-
-//                if(response.getApi().getDelete().equals("DELETE")) mDelete = true;
-
-                Log.i(TAG, response.toString());
-
-                DeviceLab deviceLab = DeviceLab.get(getActivity());
-                List<Device> devicesList = deviceLab.getDevices();
-                devicesList.clear();
-
-            } catch (IOException ioe) {
-                Log.e(TAG, "Failed to fetch URL: ", ioe);
-            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
-
-
-            if(mDelete) {
-                try{
-                    Thread.sleep(1000);
-                } catch (Exception e) {
-                    Log.e(TAG, "Error" + e);
-                }
                 getActivity().finish();
-            } else {
-                Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
-            }
         }
     }
-
-
 }

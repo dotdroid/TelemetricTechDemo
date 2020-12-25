@@ -1,4 +1,4 @@
-package ru.dotdroid.telemetrictechdemo;
+package ru.dotdroid.telemetrictechdemo.ui;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -6,17 +6,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import ru.dotdroid.telemetrictechdemo.R;
+import ru.dotdroid.telemetrictechdemo.utils.TelemetricApi;
+
+import static ru.dotdroid.telemetrictechdemo.utils.TelemetricApi.*;
 
 public class LoginScreenActivity extends AppCompatActivity {
 
@@ -94,35 +93,14 @@ public class LoginScreenActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            try {
-                String md5Auth = new Md5Util().md5Custom(mEmail + mPassword);
-                Map<String, String> postData = new HashMap<>();
-                postData.put("authKey", md5Auth);
-                PostParamBuild postDataBuild = new PostParamBuild();
-
-                byte[] postDataBytes = postDataBuild.postParBuilder(postData).getBytes();
-                int postDataBytesLen = postDataBytes.length;
-
-                String result = new SendPost()
-                        .sendPostString("https://dev.telemetric.tech/api.login",
-                                postDataBytes, "",
-                                String.valueOf(postDataBytesLen));
-
-                Response login = new Gson().fromJson(result, Response.class);
-
-                if(login.getError() == null) sSessionKey = login.getSessionKey();
-
-            } catch (IOException ioe) {
-                Log.e(TAG, "Failed to fetch URL: ", ioe);
-            }
+            sendLogin(mEmail, mPassword);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
-            if(sSessionKey != "") {
+            if(TelemetricApi.sSessionKey != "") {
                 Intent intent = new Intent(LoginScreenActivity.this, DeviceListActivity.class);
                 startActivity(intent);
                 finish();

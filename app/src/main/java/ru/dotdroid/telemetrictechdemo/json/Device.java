@@ -1,9 +1,8 @@
-package ru.dotdroid.telemetrictechdemo.devices;
+package ru.dotdroid.telemetrictechdemo.json;
 
 import com.google.gson.annotations.SerializedName;
 
 public class Device {
-
     @SerializedName("company_id")
     private String mCompanyId;
     @SerializedName("id")
@@ -64,9 +63,6 @@ public class Device {
     private String mDeviceGroupId;
     @SerializedName("icon_group")
     private String mIconGroup;
-
-    public Device() {
-    }
 
     public String getCompanyId() {
         return mCompanyId;

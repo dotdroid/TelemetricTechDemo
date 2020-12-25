@@ -1,4 +1,4 @@
-package ru.dotdroid.telemetrictechdemo;
+package ru.dotdroid.telemetrictechdemo.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class PostParamBuild {
 
-    String postParBuilder(Map<String, String> data) throws UnsupportedEncodingException {
+    public String postParBuilder(Map<String, String> data) throws UnsupportedEncodingException {
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<String, String> entry : data.entrySet()) {
             if (builder.length() > 0) {
