@@ -6,7 +6,7 @@ import java.util.Date;
 public class MyDateFormat {
 
     public static String unixToDate(long unixDate) {
-        long du = Long.valueOf(unixDate) * 1000L;
+        long du = unixDate * 1000L;
         Date df = new Date(du);
         return new SimpleDateFormat("dd.MM.yyyy HH:mm").format(df);
     }
