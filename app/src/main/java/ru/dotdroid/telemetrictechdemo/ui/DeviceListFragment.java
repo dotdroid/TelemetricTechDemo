@@ -38,7 +38,7 @@ public class DeviceListFragment extends Fragment {
         setHasOptionsMenu(true);
         setRetainInstance(true);
 
-        mAllDevicesRecyclerView = (RecyclerView) view.findViewById(R.id.allDevicesList);
+        mAllDevicesRecyclerView = (RecyclerView) view.findViewById(R.id.all_devices_list);
         mAllDevicesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         new getAllDevices().execute();
@@ -51,12 +51,16 @@ public class DeviceListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_main_screen, menu);
+        inflater.inflate(R.menu.fragment_device_list, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.refresh:
+                new getAllDevices().execute();
+                updateUI();
+                return true;
             case R.id.create_device:
                 Intent intentCreate = new Intent(getActivity(), DeviceCreateActivity.class);
                 startActivity(intentCreate);
@@ -105,32 +109,30 @@ public class DeviceListFragment extends Fragment {
             mDevEUITextView = (TextView) itemView.findViewById(R.id.list_item_deveui);
             mDeviceImageView = (ImageView) itemView.findViewById(R.id.list_device_image);
             mStatusImageView = (ImageView) itemView.findViewById(R.id.list_online_indicator);
-
         }
 
         public void bind(Device device) {
             mDevice = device;
+            long currentTime = Calendar.getInstance().getTimeInMillis() / 1000L;
             mTitleTextView.setText(mDevice.getTitle());
             mDevEUITextView.setText(mDevice.getDeviceEui());
 
             if(mDevice.getDeviceTypeId().equals("17")){
-                mDeviceImageView.setImageResource(R.drawable.electro);
+                mDeviceImageView.setImageResource(R.drawable.icon_power);
             } else if(mDevice.getDeviceTypeId().equals("53")) {
-                mDeviceImageView.setImageResource(R.drawable.baza);
+                mDeviceImageView.setImageResource(R.drawable.icon_base);
             } else if(mDevice.getDeviceTypeId().equals("66")) {
-                mDeviceImageView.setImageResource(R.drawable.water);
+                mDeviceImageView.setImageResource(R.drawable.icon_water);
             } else {
-                mDeviceImageView.setImageResource(R.drawable.plata);
+                mDeviceImageView.setImageResource(R.drawable.icon_generic);
             }
 
-            long currentTime = Calendar.getInstance().getTimeInMillis() / 1000L;
-
             if((currentTime - Long.parseLong(mDevice.getLastActive()) < Long.parseLong(mDevice.getReportPeriodUpdate()))) {
-                mStatusImageView.setImageResource(R.drawable.circle_green);
+                mStatusImageView.setImageResource(R.drawable.status_online);
             } else if (Long.parseLong(mDevice.getLastActive()) == 0) {
-                mStatusImageView.setImageResource(R.drawable.circle_white);
+                mStatusImageView.setImageResource(R.drawable.status_new);
             } else {
-                mStatusImageView.setImageResource(R.drawable.circle_red);
+                mStatusImageView.setImageResource(R.drawable.status_offline);
             }
         }
 

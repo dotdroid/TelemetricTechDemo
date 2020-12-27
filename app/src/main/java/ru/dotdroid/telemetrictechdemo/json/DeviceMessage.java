@@ -35,6 +35,8 @@ public class DeviceMessage extends Device {
         private int mLongMagnetFlag;
         @SerializedName("record_timestamp")
         private long mRecordTimestamp;
+        @SerializedName("recordTimestamp")
+        private long mRecordTimestamp2;
         @SerializedName("leakDetectionFlag")
         private int mLeakDetectionFlag;
         @SerializedName("impact_magnet_flag")
@@ -96,6 +98,10 @@ public class DeviceMessage extends Device {
 
         public long getRecordTimestamp() {
             return mRecordTimestamp;
+        }
+
+        public long getRecordTimestamp2() {
+            return mRecordTimestamp2;
         }
 
         public int getLeakDetectionFlag() {

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -34,14 +35,14 @@ public class DeviceFragment extends Fragment {
     private Device mDevice;
     private boolean mDelete = false;
 
-    private TextView mTitleTextView, mCreateDateTextView, mTypeTextView,
-            mDevEUITextTextView, mDevEUITextView, mAppKeyTextTextView, mAppKeyTextView,
-            mDescriptionTextView, mLastMessageTextView;
+    private TextView mTitleTextView, mCreateDateTextView, mCreateDateTextViewValue, mTypeTextView,
+            mDescriptionTextView, mDevEUITextTextView, mDevEUITextView, mAppKeyTextTextView,
+            mAppKeyTextView, mLastMessageTextView;
     private Button mMessagesButton;
 
-    public static DeviceFragment newInstance(String deviceEUI) {
+    public static DeviceFragment newInstance(String deviceEui) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_DEVICE_EUI, deviceEUI);
+        args.putSerializable(ARG_DEVICE_EUI, deviceEui);
         DeviceFragment fragment = new DeviceFragment();
         fragment.setArguments(args);
         return fragment;
@@ -65,18 +66,19 @@ public class DeviceFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.delete_device:
                 new AlertDialog.Builder(getContext())
+                        .setTitle(R.string.delete_device)
                         .setMessage(R.string.confirm_delete)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                new deleteDevice().execute();
-                                dialogInterface.dismiss();
+                               dialogInterface.dismiss();
                             }
                         })
                         .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
+                               dialogInterface.dismiss();
                             }
                         })
                         .create()
@@ -97,9 +99,13 @@ public class DeviceFragment extends Fragment {
         mTitleTextView = (TextView) viewForFragment.findViewById(R.id.device_title);
         mTitleTextView.setText(mDevice.getTitle());
         mCreateDateTextView = (TextView) viewForFragment.findViewById(R.id.device_create_date);
-        mCreateDateTextView.setText(mDevice.getCreatedAt());
+        mCreateDateTextView.setText(R.string.created_at);
+        mCreateDateTextViewValue = (TextView) viewForFragment.findViewById(R.id.device_create_date_value);
+        mCreateDateTextViewValue.setText(mDevice.getCreatedAt());
         mTypeTextView = (TextView) viewForFragment.findViewById(R.id.device_type);
         mTypeTextView.setText(mDevice.getTypeTitle());
+        mDescriptionTextView = (TextView) viewForFragment.findViewById(R.id.device_desc);
+        mDescriptionTextView.setText(mDevice.getDesc());
         mDevEUITextTextView = (TextView) viewForFragment.findViewById(R.id.device_deveui_text);
         mDevEUITextTextView.setText(R.string.deveui);
         mDevEUITextView = (TextView) viewForFragment.findViewById(R.id.device_deveui);
@@ -108,11 +114,8 @@ public class DeviceFragment extends Fragment {
         mAppKeyTextTextView.setText(R.string.app_key);
         mAppKeyTextView = (TextView) viewForFragment.findViewById(R.id.device_appkey);
         mAppKeyTextView.setText(mDevice.getKeyAp());
-        mDescriptionTextView = (TextView) viewForFragment.findViewById(R.id.device_desc);
-        mDescriptionTextView.setText(mDevice.getDesc());
-        mLastMessageTextView = (TextView) viewForFragment.findViewById(R.id.device_last_message);
-        mLastMessageTextView.setText(mDevice.getLastMessage());
-
+        mLastMessageTextView = (TextView) viewForFragment.findViewById(R.id.device_last_message_text);
+        mLastMessageTextView.setText(R.string.last_message);
         mMessagesButton = (Button) viewForFragment.findViewById(R.id.messages_button);
         mMessagesButton.setOnClickListener(new View.OnClickListener() {
             @Override

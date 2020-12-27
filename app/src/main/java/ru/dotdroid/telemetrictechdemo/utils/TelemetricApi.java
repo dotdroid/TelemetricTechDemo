@@ -1,8 +1,11 @@
 package ru.dotdroid.telemetrictechdemo.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -12,16 +15,18 @@ import ru.dotdroid.telemetrictechdemo.json.Response;
 import ru.dotdroid.telemetrictechdemo.json.Device;
 import ru.dotdroid.telemetrictechdemo.json.DeviceMessage;
 import ru.dotdroid.telemetrictechdemo.json.DeviceType;
+import ru.dotdroid.telemetrictechdemo.ui.LoginScreenActivity;
 
 public class TelemetricApi {
 
     private static final String TAG = "TelemetricApi";
 
-    public static String sSessionKey;
+    private static final String TELEMETRIC_URL = "https://dev.telemetric.tech/";
+
+    private static String sSessionKey;
 
     public static int sendLogin(String email, String password) {
 
-        String key = "";
         int mError = 0;
 
         try {
@@ -34,7 +39,7 @@ public class TelemetricApi {
             int postDataBytesLen = postDataBytes.length;
 
             String result = new SendPost()
-                    .sendPostString("https://dev.telemetric.tech/api.login",
+                    .sendPostString(TELEMETRIC_URL + "api.login",
                             postDataBytes, "",
                             String.valueOf(postDataBytesLen));
 
@@ -63,30 +68,35 @@ public class TelemetricApi {
             int postDataBytesLen = postDataBytes.length;
 
             String result = new SendPost()
-                    .sendPostString("https://dev.telemetric.tech/api.devices.all",
+                    .sendPostString(TELEMETRIC_URL + "api.devices.all",
                             postDataBytes, sSessionKey,
                             String.valueOf(postDataBytesLen));
 
             Log.i(TAG, "Download list");
 
             Gson gson = new Gson();
-            Device[] devices = gson.fromJson(result, Device[].class);
 
-            DeviceLab deviceLab = DeviceLab.get(context);
-            List<Device> devicesList = deviceLab.getDevices();
-            devicesList.clear();
+            try {
+                DeviceLab deviceLab = DeviceLab.get(context);
+                List<Device> devicesList = deviceLab.getDevices();
+                devicesList.clear();
+                Device[] devices = gson.fromJson(result, Device[].class);
 
-            for(Device d : devices) {
-                d.getTitle();
-                d.getDeviceEui();
-                d.getKeyAp();
-                d.getTypeTitle();
-                d.getDesc();
-                d.getCreatedAt();
-                d.getLastMessage();
-                d.getLastActive();
-                devicesList.add(d);
+                for(Device d : devices) {
+                    d.getTitle();
+                    d.getDeviceEui();
+                    d.getKeyAp();
+                    d.getTypeTitle();
+                    d.getDesc();
+                    d.getCreatedAt();
+                    d.getLastMessage();
+                    d.getLastActive();
+                    devicesList.add(d);
+                }
+            } catch (JsonParseException jpe) {
+                Log.e(TAG, "Exception " + jpe);
             }
+
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to fetch URL: ", ioe);
         }
@@ -102,7 +112,7 @@ public class TelemetricApi {
             int postDataBytesLen = postDataBytes.length;
 
             String result = new SendPost()
-                    .sendPostString("https://dev.telemetric.tech/api.devices.types",
+                    .sendPostString(TELEMETRIC_URL + "api.devices.types",
                             postDataBytes, sSessionKey,
                             String.valueOf(postDataBytesLen));
 
@@ -126,7 +136,7 @@ public class TelemetricApi {
     public static String createDevice(Context context, String devEui, String deviceGateway,
                                     String gatewayId, String insideAddr, String deviceTitle,
                                     String deviceDesc, String deviceType, String keyAp,
-                                    String  keyNw) {
+                                    String keyNw) {
 
         String resultCreate = "";
 
@@ -147,7 +157,7 @@ public class TelemetricApi {
             int postDataBytesLen = postDataBytes.length;
 
             String result = new SendPost()
-                    .sendPostString("https://dev.telemetric.tech/api.devices.create",
+                    .sendPostString(TELEMETRIC_URL + "api.devices.create",
                             postDataBytes, sSessionKey,
                             String.valueOf(postDataBytesLen));
 
@@ -174,7 +184,7 @@ public class TelemetricApi {
             int postDataBytesLen = postDataBytes.length;
 
             String result = new SendPost()
-                    .sendPostString("https://dev.telemetric.tech/api.devices.remove",
+                    .sendPostString(TELEMETRIC_URL + "api.devices.remove",
                             postDataBytes, sSessionKey,
                             String.valueOf(postDataBytesLen));
 
@@ -188,7 +198,9 @@ public class TelemetricApi {
         return resultDelete;
     }
 
-    public static void getMessages(String devId) {
+    public static String getMessages(Context context, String devId) {
+
+        String messages = "";
 
         try {
             Map<String, String> postData = new HashMap<>();
@@ -199,16 +211,15 @@ public class TelemetricApi {
             int postDataBytesLen = postDataBytes.length;
 
             String result = new SendPost()
-                    .sendPostString("https://dev.telemetric.tech/api.devices.messages",
+                    .sendPostString(TELEMETRIC_URL + "api.devices.messages",
                             postDataBytes, sSessionKey,
                             String.valueOf(postDataBytesLen));
 
-            Gson gson = new Gson();
-            DeviceMessage response = gson.fromJson(result, DeviceMessage.class);
+            messages = result;
 
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to fetch URL: ", ioe);
         }
-
+        return messages;
     }
 }

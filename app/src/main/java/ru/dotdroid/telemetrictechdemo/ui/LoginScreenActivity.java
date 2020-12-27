@@ -7,11 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ru.dotdroid.telemetrictechdemo.R;
 import ru.dotdroid.telemetrictechdemo.utils.ErrorParse;
@@ -23,8 +21,6 @@ public class LoginScreenActivity extends AppCompatActivity {
     private EditText mEmailTextViewField, mPasswordTextViewField;
     private Button mLogInButton;
     private String mEmail, mPassword;
-    protected static String sSessionKey = "";
-
 
     private static final String TAG = "LoginScreen";
 
@@ -73,18 +69,12 @@ public class LoginScreenActivity extends AppCompatActivity {
         });
 
         mLogInButton = findViewById(R.id.login_button);
-        mLogInButton.setText("Log in");
+        mLogInButton.setText(R.string.login);
         mLogInButton.setOnClickListener(v -> {
             if(validateField()) {
                 new sendLogin().execute();
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sSessionKey = "";
     }
 
     public boolean validateField() {

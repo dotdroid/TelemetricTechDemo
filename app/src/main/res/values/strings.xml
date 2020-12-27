@@ -5,6 +5,7 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="create_device">Create new device</string>
+    <string name="created_at">Created at: </string>
     <string name="deveui">DevEUI</string>
     <string name="app_key">AppKey</string>
     <string name="search">Search</string>
@@ -16,8 +17,21 @@
     <string name="scan_qr">Scan QR-code</string>
     <string name="incorrect_pwd">Wrong password!</string>
     <string name="confirm_delete">Are you sure?</string>
+    <string name="delete_device">Delete device</string>
     <string name="email_error">Enter a valid email address</string>
     <string name="password_error">Password must be 4 or more characters</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="receive_timestamp">Received at</string>
+    <string name="record_timestamp">Record time</string>
+    <string name="rssi">RSSI</string>
+    <string name="battery">Battery level</string>
+    <string name="reason_to_send">Reason to send</string>
+    <string name="leakage">Leakage</string>
+    <string name="magnet">Impact magnet</string>
+    <string name="scheduled">Scheduled</string>
+    <string name="direct_flow">Direct flow</string>
+    <string name="last_message">Last message:</string>
+    <string name="refresh">Refresh</string>
+    <string name="no_data">-</string>
 </resources>
