@@ -38,4 +38,5 @@
     <string name="last_message">Last message:</string>
     <string name="refresh">Refresh</string>
     <string name="no_data">-</string>
+    <string name="last_30days_messages">Messages (for the last 30 days)</string>
 </resources>

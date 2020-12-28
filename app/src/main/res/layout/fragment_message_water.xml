@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/message_list_receive_timestamp"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -24,12 +24,12 @@
         android:layout_marginEnd="16dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/message_list_reason_to_send"
+        app:layout_constraintStart_toEndOf="@+id/message_list_receive_timestamp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/message_list_record_timestamp"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -46,12 +46,12 @@
         android:layout_marginEnd="16dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/message_list_reason_to_send"
+        app:layout_constraintStart_toEndOf="@+id/message_list_record_timestamp"
         app:layout_constraintTop_toBottomOf="@+id/message_list_receive_timestamp_value" />
 
     <TextView
         android:id="@+id/messages_list_rssi"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -68,12 +68,12 @@
         android:layout_marginEnd="16dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/message_list_reason_to_send"
+        app:layout_constraintStart_toEndOf="@+id/messages_list_rssi"
         app:layout_constraintTop_toBottomOf="@+id/message_list_record_value" />
 
     <TextView
         android:id="@+id/message_list_battery"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -90,12 +90,12 @@
         android:layout_marginEnd="16dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/message_list_reason_to_send"
+        app:layout_constraintStart_toEndOf="@+id/message_list_battery"
         app:layout_constraintTop_toBottomOf="@+id/messages_list_rssi_value" />
 
     <TextView
         android:id="@+id/message_list_reason_to_send"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -117,7 +117,7 @@
 
     <TextView
         android:id="@+id/messages_list_directflow"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -138,7 +138,7 @@
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/message_list_reason_to_send"
+        app:layout_constraintStart_toEndOf="@+id/messages_list_directflow"
         app:layout_constraintTop_toBottomOf="@+id/message_list_reason_to_send_value" />
 
 </android.support.constraint.ConstraintLayout>

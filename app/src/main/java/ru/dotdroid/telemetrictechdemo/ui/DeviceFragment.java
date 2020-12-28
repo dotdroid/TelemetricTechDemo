@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -22,6 +22,9 @@ import com.google.gson.Gson;
 import ru.dotdroid.telemetrictechdemo.R;
 import ru.dotdroid.telemetrictechdemo.json.Device;
 import ru.dotdroid.telemetrictechdemo.json.Response;
+import ru.dotdroid.telemetrictechdemo.ui.lastmessage.Generic;
+import ru.dotdroid.telemetrictechdemo.ui.lastmessage.Inertia;
+import ru.dotdroid.telemetrictechdemo.ui.lastmessage.Water;
 import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
 import ru.dotdroid.telemetrictechdemo.utils.ErrorParse;
 import ru.dotdroid.telemetrictechdemo.utils.TelemetricApi;
@@ -39,6 +42,7 @@ public class DeviceFragment extends Fragment {
             mDescriptionTextView, mDevEUITextTextView, mDevEUITextView, mAppKeyTextTextView,
             mAppKeyTextView, mLastMessageTextView;
     private Button mMessagesButton;
+    private FrameLayout mLastMessageFragment;
 
     public static DeviceFragment newInstance(String deviceEui) {
         Bundle args = new Bundle();
@@ -116,7 +120,9 @@ public class DeviceFragment extends Fragment {
         mAppKeyTextView.setText(mDevice.getKeyAp());
         mLastMessageTextView = (TextView) viewForFragment.findViewById(R.id.device_last_message_text);
         mLastMessageTextView.setText(R.string.last_message);
+        mLastMessageFragment = (FrameLayout) viewForFragment.findViewById(R.id.device_fragment_container);
         mMessagesButton = (Button) viewForFragment.findViewById(R.id.messages_button);
+        mMessagesButton.setText(R.string.last_30days_messages);
         mMessagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,6 +132,22 @@ public class DeviceFragment extends Fragment {
         });
 
         return viewForFragment;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+
+        Fragment childFragment;
+
+        if (mDevice.getDeviceTypeId().equals("66")) {
+            childFragment = Water.newInstance(ARG_DEVICE_EUI);
+        } else if (mDevice.getDeviceTypeId().equals("82")) {
+            childFragment = Inertia.newInstance(ARG_DEVICE_EUI);
+        } else {
+            childFragment = Generic.newInstance(ARG_DEVICE_EUI);
+        }
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.device_fragment_container, childFragment).commit();
     }
 
     private class deleteDevice extends AsyncTask<Void, Void, Void> {
