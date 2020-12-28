@@ -28,6 +28,10 @@
     <string name="battery">Battery level</string>
     <string name="reason_to_send">Reason to send</string>
     <string name="leakage">Leakage</string>
+    <string name="alarm">Alarm</string>
+    <string name="accelerometer_angle">Accelerometer angle</string>
+    <string name="magnetometer_angle">Magnetometer angle</string>
+    <string name="link_button">LINK button</string>
     <string name="magnet">Impact magnet</string>
     <string name="scheduled">Scheduled</string>
     <string name="direct_flow">Direct flow</string>

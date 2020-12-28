@@ -13,6 +13,8 @@ public class DeviceMessage extends Device {
     private Debug mDebug;
 
     public class Messages {
+
+        //generic
         @SerializedName("loRaSNR")
         private double mLoRaSnr;
         @SerializedName("datetime")
@@ -23,6 +25,8 @@ public class DeviceMessage extends Device {
         private int mOpenCase;
         @SerializedName("battery_level")
         private int mBatteryLevel;
+        @SerializedName("batteryLevel")
+        private int mBatteryLevel2;
         @SerializedName("loRaGatewayID")
         private String mLoRaGatewayId;
         @SerializedName("device_datetime")
@@ -31,16 +35,26 @@ public class DeviceMessage extends Device {
         private String mRecordDatetime;
         @SerializedName("device_timestamp")
         private long mDeviceTimestamp;
+        @SerializedName("deviceTimestamp")
+        private long mDeviceTimestamp2;
         @SerializedName("long_magnet_flag")
         private int mLongMagnetFlag;
         @SerializedName("record_timestamp")
         private long mRecordTimestamp;
         @SerializedName("recordTimestamp")
         private long mRecordTimestamp2;
-        @SerializedName("leakDetectionFlag")
-        private int mLeakDetectionFlag;
         @SerializedName("impact_magnet_flag")
         private int mImpactMagnetFlag;
+        @SerializedName("signMagnetFlag")
+        private int mSignMagnetFlag;
+        @SerializedName("signOpenCase")
+        private int mSignOpenCase;
+        @SerializedName("signLinkButton")
+        private int mSignLinkButton;
+
+        //water
+        @SerializedName("leakDetectionFlag")
+        private int mLeakDetectionFlag;
         @SerializedName("direct_flow_liter_counter")
         private int mDirectFlowLiterCounter;
         @SerializedName("counter_reverse_flow_liters")
@@ -55,6 +69,28 @@ public class DeviceMessage extends Device {
         private double mEndDirectFlowLiterCounter;
         @SerializedName("delta_direct_flow_liter_counter")
         private double mDeltaDirectFlowLiterCounter;
+
+        //inertia
+        @SerializedName("signAlarm")
+        private int mSignAlarm;
+        @SerializedName("packageType")
+        private String mPackageType;
+        @SerializedName("magnetometerAngle")
+        private float mMagnetometerAngle;
+        @SerializedName("magnetometerAxisX")
+        private int mMagnetometerAxisX;
+        @SerializedName("magnetometerAxisY")
+        private int mMagnetometerAxisY;
+        @SerializedName("magnetometerAxisZ")
+        private int mMagnetometerAxisZ;
+        @SerializedName("accelerometerAngle")
+        private float mAccelerometerAngle;
+        @SerializedName("accelerometerAxisX")
+        private int mAccelerometerAxisX;
+        @SerializedName("accelerometerAxisY")
+        private int mAccelerometerAxisY;
+        @SerializedName("accelerometerAxisZ")
+        private int mAccelerometerAxisZ;
 
         public double getLoRaSnr() {
             return mLoRaSnr;
@@ -76,6 +112,10 @@ public class DeviceMessage extends Device {
             return mBatteryLevel;
         }
 
+        public int getBatteryLevel2() {
+            return mBatteryLevel2;
+        }
+
         public String getLoRaGatewayId() {
             return mLoRaGatewayId;
         }
@@ -92,6 +132,10 @@ public class DeviceMessage extends Device {
             return mDeviceTimestamp;
         }
 
+        public long getDeviceTimestamp2() {
+            return mDeviceTimestamp2;
+        }
+
         public int getLongMagnetFlag() {
             return mLongMagnetFlag;
         }
@@ -104,12 +148,24 @@ public class DeviceMessage extends Device {
             return mRecordTimestamp2;
         }
 
-        public int getLeakDetectionFlag() {
-            return mLeakDetectionFlag;
-        }
-
         public int getImpactMagnetFlag() {
             return mImpactMagnetFlag;
+        }
+
+        public int getSignMagnetFlag() {
+            return mSignMagnetFlag;
+        }
+
+        public int getSignOpenCase() {
+            return mSignOpenCase;
+        }
+
+        public int getSignLinkButton() {
+            return mSignLinkButton;
+        }
+
+        public int getLeakDetectionFlag() {
+            return mLeakDetectionFlag;
         }
 
         public int getDirectFlowLiterCounter() {
@@ -138,6 +194,46 @@ public class DeviceMessage extends Device {
 
         public double getDeltaDirectFlowLiterCounter() {
             return mDeltaDirectFlowLiterCounter;
+        }
+
+        public int getSignAlarm() {
+            return mSignAlarm;
+        }
+
+        public String getPackageType() {
+            return mPackageType;
+        }
+
+        public float getMagnetometerAngle() {
+            return mMagnetometerAngle;
+        }
+
+        public int getMagnetometerAxisX() {
+            return mMagnetometerAxisX;
+        }
+
+        public int getMagnetometerAxisY() {
+            return mMagnetometerAxisY;
+        }
+
+        public int getMagnetometerAxisZ() {
+            return mMagnetometerAxisZ;
+        }
+
+        public float getAccelerometerAngle() {
+            return mAccelerometerAngle;
+        }
+
+        public int getAccelerometerAxisX() {
+            return mAccelerometerAxisX;
+        }
+
+        public int getAccelerometerAxisY() {
+            return mAccelerometerAxisY;
+        }
+
+        public int getAccelerometerAxisZ() {
+            return mAccelerometerAxisZ;
         }
     }
 
