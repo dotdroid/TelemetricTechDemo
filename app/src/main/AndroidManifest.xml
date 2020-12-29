@@ -15,7 +15,7 @@
         android:theme="@style/Theme.TelemetricTechDemo">
         <activity
             android:name=".ui.DeviceMessagesActivity"
-            android:parentActivityName=".ui.DevicePagerActivity"/>
+            android:parentActivityName=".ui.DeviceListActivity"/>
         <activity
             android:name=".ui.CameraScreenActivity"
             android:parentActivityName=".ui.DeviceCreateActivity"/>

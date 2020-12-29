@@ -198,13 +198,18 @@ public class TelemetricApi {
         return resultDelete;
     }
 
-    public static String getMessages(Context context, String devId) {
+    public static String getMessages(String devId, long startDate, long endDate) {
 
         String messages = "";
 
         try {
             Map<String, String> postData = new HashMap<>();
             postData.put("deviceId", devId);
+            postData.put("timestampBegin", Long.toString(startDate));
+            postData.put("timestampEnd", Long.toString(endDate));
+            postData.put("grouping", "0");
+            postData.put("timeZone", "10800");
+
             PostParamBuild postDataBuild = new PostParamBuild();
 
             byte[] postDataBytes = postDataBuild.postParBuilder(postData).getBytes();

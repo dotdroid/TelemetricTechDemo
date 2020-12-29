@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.util.Calendar;
+
 import ru.dotdroid.telemetrictechdemo.R;
 import ru.dotdroid.telemetrictechdemo.json.Device;
 import ru.dotdroid.telemetrictechdemo.json.Response;
@@ -33,15 +35,21 @@ public class DeviceFragment extends Fragment {
 
     private static final String TAG = "DeviceFragment";
 
+    public static final String EXTRA_DEVICE_EUI = "ru.dotdroid.telemetrictechdemo.device_eui";
+    public static final String EXTRA_MESSAGES_START = "ru.dotdroid.telemetrictechdemo.messages_start";
+    public static final String EXTRA_MESSAGES_END = "ru.dotdroid.telemetrictechdemo.messages_end";
+
     private static final String ARG_DEVICE_EUI = "device_eui";
 
     private Device mDevice;
     private boolean mDelete = false;
 
+    private long mMessagesAll, mMessagesStart, mMessagesEnd;
+
     private TextView mTitleTextView, mCreateDateTextView, mCreateDateTextViewValue, mTypeTextView,
             mDescriptionTextView, mDevEUITextTextView, mDevEUITextView, mAppKeyTextTextView,
             mAppKeyTextView, mLastMessageTextView;
-    private Button mMessagesButton;
+    private Button mMessagesButton, mAllMessagesButton;
     private FrameLayout mLastMessageFragment;
 
     public static DeviceFragment newInstance(String deviceEui) {
@@ -123,10 +131,22 @@ public class DeviceFragment extends Fragment {
         mLastMessageFragment = (FrameLayout) viewForFragment.findViewById(R.id.device_fragment_container);
         mMessagesButton = (Button) viewForFragment.findViewById(R.id.messages_button);
         mMessagesButton.setText(R.string.last_30days_messages);
+        mMessagesAll = 1420070400L;
+        mMessagesStart = (Calendar.getInstance().getTimeInMillis() / 1000L) - 2592000L;
+        mMessagesEnd = Calendar.getInstance().getTimeInMillis() / 1000L;
         mMessagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), DeviceMessagesActivity.class);
+                Intent intent = DeviceMessagesActivity.newIntent(getContext(), mDevice.getDeviceEui(), mMessagesStart, mMessagesEnd);
+                startActivity(intent);
+            }
+        });
+        mAllMessagesButton = (Button) viewForFragment.findViewById(R.id.messages_button_all);
+        mAllMessagesButton.setText(R.string.all_messages);
+        mAllMessagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = DeviceMessagesActivity.newIntent(getContext(), mDevice.getDeviceEui(), mMessagesAll, mMessagesEnd);
                 startActivity(intent);
             }
         });

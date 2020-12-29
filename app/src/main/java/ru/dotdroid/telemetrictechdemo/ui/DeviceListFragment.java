@@ -33,12 +33,12 @@ public class DeviceListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_screen, container, false);
+        View view = inflater.inflate(R.layout.fragment_lists_screen, container, false);
 
         setHasOptionsMenu(true);
         setRetainInstance(true);
 
-        mAllDevicesRecyclerView = (RecyclerView) view.findViewById(R.id.all_devices_list);
+        mAllDevicesRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_container);
         mAllDevicesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         new getAllDevices().execute();

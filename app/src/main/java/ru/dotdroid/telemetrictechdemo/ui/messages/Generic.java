@@ -1,0 +1,192 @@
+package ru.dotdroid.telemetrictechdemo.ui.messages;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+
+import java.util.List;
+
+import ru.dotdroid.telemetrictechdemo.R;
+import ru.dotdroid.telemetrictechdemo.json.DeviceMessage;
+import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
+import ru.dotdroid.telemetrictechdemo.utils.TelemetricApi;
+
+import static ru.dotdroid.telemetrictechdemo.utils.MyDateFormat.unixToDate;
+
+public class Generic extends Fragment {
+
+    final private static String TAG = "Generic";
+
+    private static final String ARG_DEVICE_ID = "device_id";
+    private static final String ARG_MESSAGES_START = "messages_start";
+    private static final String ARG_MESSAGES_END = "messages_end";
+
+    private String mDeviceId;
+    private long mMessagesStart, mMessagesEnd;
+
+    private RecyclerView mMessagesRecyclerView;
+    private MessagesAdapter mAdapter;
+
+    public static Generic newInstance(String deviceId, long start, long end) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_DEVICE_ID, deviceId);
+        args.putSerializable(ARG_MESSAGES_START, start);
+        args.putSerializable(ARG_MESSAGES_END, end);
+        Generic fragment = new Generic();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mDeviceId = (String) getArguments().getSerializable(ARG_DEVICE_ID);
+        mMessagesStart = (Long) getArguments().getSerializable(ARG_MESSAGES_START);
+        mMessagesEnd = (Long) getArguments().getSerializable(ARG_MESSAGES_END);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_lists_screen, container, false);
+
+        setHasOptionsMenu(true);
+        setRetainInstance(true);
+
+        new getMessages().execute();
+
+        mMessagesRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_container);
+        mMessagesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        return view;
+    }
+
+    private void updateUI() {
+        DeviceLab deviceLab = DeviceLab.get(getActivity());
+        List<DeviceMessage.Messages> messages = deviceLab.getMessages();
+
+        if(mAdapter == null) {
+            mAdapter = new MessagesAdapter(messages);
+            mMessagesRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private class MessagesHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private DeviceMessage.Messages mMessage;
+
+        private TextView mReceiveTimestampTextView, mReceiveTimestampTextViewValue,
+                mRecordTimestampTextView, mRecordTimestampTextViewValue, mRssiTextView,
+                mRssiTextViewValue, mBatteryTextView, mBatteryTextViewValue;
+
+        public MessagesHolder(LayoutInflater inflater, ViewGroup parent) {
+            super(inflater.inflate(R.layout.fragment_message_generic, parent, false));
+            itemView.setOnClickListener(this);
+
+            mReceiveTimestampTextView = (TextView) itemView.findViewById(R.id.message_list_receive_timestamp);
+            mReceiveTimestampTextViewValue = (TextView) itemView.findViewById(R.id.message_list_receive_timestamp_value);
+            mRecordTimestampTextView = (TextView) itemView.findViewById(R.id.message_list_record_timestamp);
+            mRecordTimestampTextViewValue = (TextView) itemView.findViewById(R.id.message_list_record_value);
+            mRssiTextView = (TextView) itemView.findViewById(R.id.messages_list_rssi);
+            mRssiTextViewValue = (TextView) itemView.findViewById(R.id.messages_list_rssi_value);
+            mBatteryTextView = (TextView) itemView.findViewById(R.id.message_list_battery);
+            mBatteryTextViewValue = (TextView) itemView.findViewById(R.id.message_list_battery_value);
+        }
+
+        public void bind(DeviceMessage.Messages message) {
+            mMessage = message;
+            mReceiveTimestampTextView.setText(R.string.receive_timestamp);
+            mRecordTimestampTextView.setText(R.string.record_timestamp);
+            mRssiTextView.setText(R.string.rssi);
+            mBatteryTextView.setText(R.string.battery);
+            mReceiveTimestampTextViewValue.setText(unixToDate(mMessage.getDateTime()));
+            if (mMessage.getRecordTimestamp() != 0) {
+                mRecordTimestampTextViewValue.setText(unixToDate(mMessage.getRecordTimestamp()));
+            } else {
+                mRecordTimestampTextViewValue.setText(unixToDate(mMessage.getRecordTimestamp2()));
+            }
+            mRssiTextViewValue.setText(String.valueOf(mMessage.getLoRaRssi()));
+            if(mMessage.getBatteryLevel() != 0) {
+                mBatteryTextViewValue.setText(String.valueOf(mMessage.getBatteryLevel()));
+            } else {
+                mBatteryTextViewValue.setText(String.valueOf(mMessage.getBatteryLevel2()));
+            }
+        }
+
+        @Override
+        public void onClick(View view) {
+
+        }
+    }
+
+    private class MessagesAdapter extends RecyclerView.Adapter<MessagesHolder> {
+
+        private final List<DeviceMessage.Messages> mMessages;
+
+        public MessagesAdapter(List<DeviceMessage.Messages> messages) {
+            mMessages = messages;
+        }
+
+        @Override
+        public MessagesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            return new MessagesHolder(layoutInflater, parent);
+        }
+
+        @Override
+        public void onBindViewHolder(MessagesHolder holder, int position) {
+            DeviceMessage.Messages message = mMessages.get(position);
+            holder.bind(message);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mMessages.size();
+        }
+    }
+
+    private class getMessages extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            String messagesReceived = TelemetricApi.getMessages(mDeviceId, mMessagesStart, mMessagesEnd);
+
+            Gson gson = new Gson();
+
+            try {
+                DeviceLab deviceLab = DeviceLab.get(getContext());
+                List<DeviceMessage.Messages> messagesList = deviceLab.getMessages();
+                messagesList.clear();
+
+                DeviceMessage messages = gson.fromJson(messagesReceived, DeviceMessage.class);
+
+                for(DeviceMessage.Messages m : messages.getMessages()) {
+                    messagesList.add(m);
+                }
+
+
+            } catch (JsonParseException jpe) {
+                Log.e(TAG, "Exception " + jpe);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            updateUI();
+        }
+    }
+}

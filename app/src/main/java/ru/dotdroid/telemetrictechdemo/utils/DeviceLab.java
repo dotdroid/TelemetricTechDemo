@@ -12,7 +12,7 @@ public class DeviceLab {
     private static DeviceLab sDeviceLab;
     private final List<Device> mDevices;
     private final List<DeviceType.Types> mDeviceTypes;
-    private final List<DeviceMessage.Messages> mDeviceMessages;
+    private final List<DeviceMessage.Messages> mMessages;
 
     private static final String TAG = "DeviceLab";
 
@@ -26,17 +26,21 @@ public class DeviceLab {
     private DeviceLab(Context context) {
         mDevices = new ArrayList<>();
         mDeviceTypes = new ArrayList<>();
-        mDeviceMessages = new ArrayList<>();
+        mMessages = new ArrayList<>();
     }
 
     public List<Device> getDevices() {
         return mDevices;
     }
 
+    public List<DeviceMessage.Messages> getMessages() {
+        return mMessages;
+    }
+
     public void clearLists() {
         mDevices.clear();
         mDeviceTypes.clear();
-        mDeviceMessages.clear();
+        mMessages.clear();
     }
 
     public List<DeviceType.Types> getDeviceTypes() {

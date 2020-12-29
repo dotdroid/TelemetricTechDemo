@@ -24,9 +24,7 @@ public class Inertia extends Fragment {
             mMagnetometerAngleTextView, mMagnetometerAngleValueTextView;
 
     private Device mDevice;
-
-
-
+    
     public static Inertia newInstance(String deviceEui) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_DEVICE_EUI, deviceEui);

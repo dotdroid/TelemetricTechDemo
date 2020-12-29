@@ -12,8 +12,19 @@ public class DeviceMessage extends Device {
     @SerializedName("debug")
     private Debug mDebug;
 
-    public class Messages {
+    public List<Messages> getMessages() {
+        return mMessages;
+    }
 
+    public String getTimeZone() {
+        return mTimeZone;
+    }
+
+    public Debug getDebug() {
+        return mDebug;
+    }
+
+    public class Messages {
         //generic
         @SerializedName("loRaSNR")
         private double mLoRaSnr;
@@ -24,9 +35,9 @@ public class DeviceMessage extends Device {
         @SerializedName("open_case")
         private int mOpenCase;
         @SerializedName("battery_level")
-        private int mBatteryLevel;
+        private float mBatteryLevel;
         @SerializedName("batteryLevel")
-        private int mBatteryLevel2;
+        private float mBatteryLevel2;
         @SerializedName("loRaGatewayID")
         private String mLoRaGatewayId;
         @SerializedName("device_datetime")
@@ -92,6 +103,13 @@ public class DeviceMessage extends Device {
         @SerializedName("accelerometerAxisZ")
         private int mAccelerometerAxisZ;
 
+        @Override
+        public String toString() {
+            return "Messages{" +
+                    "mDateTime=" + mDateTime +
+                    '}';
+        }
+
         public double getLoRaSnr() {
             return mLoRaSnr;
         }
@@ -108,11 +126,11 @@ public class DeviceMessage extends Device {
             return mOpenCase;
         }
 
-        public int getBatteryLevel() {
+        public float getBatteryLevel() {
             return mBatteryLevel;
         }
 
-        public int getBatteryLevel2() {
+        public float getBatteryLevel2() {
             return mBatteryLevel2;
         }
 
@@ -247,35 +265,23 @@ public class DeviceMessage extends Device {
             return mCode;
         }
 
-        public List<DeviceMessage.Answer> getAnswer() {
+        public List<Answer> getAnswer() {
             return mAnswer;
         }
-    }
 
-    public class Answer {
-        @SerializedName("datetime")
-        private String mDatetime;
-        @SerializedName("message")
-        private String mMessage;
+        public class Answer {
+            @SerializedName("datetime")
+            private String mDatetime;
+            @SerializedName("message")
+            private String mMessage;
 
-        public String getDatetime() {
-            return mDatetime;
+            public String getDatetime() {
+                return mDatetime;
+            }
+
+            public String getMessage() {
+                return mMessage;
+            }
         }
-
-        public String getMessage() {
-            return mMessage;
-        }
-    }
-
-    public List<DeviceMessage.Messages> getMessages() {
-        return mMessages;
-    }
-
-    public String getTimeZone() {
-        return mTimeZone;
-    }
-
-    public DeviceMessage.Debug getDebug() {
-        return mDebug;
     }
 }
