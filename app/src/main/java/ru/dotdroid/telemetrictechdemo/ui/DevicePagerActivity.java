@@ -10,6 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 import ru.dotdroid.telemetrictechdemo.R;
@@ -33,6 +35,7 @@ public class DevicePagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_pager);
+
         mViewPager = (ViewPager) findViewById(R.id.device_view_pager);
 
         String deviceEui = (String) getIntent().getSerializableExtra(EXTRA_DEVICE_EUI);

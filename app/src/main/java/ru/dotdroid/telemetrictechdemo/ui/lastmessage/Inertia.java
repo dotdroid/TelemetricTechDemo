@@ -83,8 +83,8 @@ public class Inertia extends Fragment {
             } else {
                 mReasonTextViewValue.setText(R.string.scheduled);
             }
-            mAccelerometerAngleValueTextView.setText(Float.toString(lastMessage.getAccelerometerAngle()));
-            mMagnetometerAngleValueTextView.setText(Float.toString(lastMessage.getMagnetometerAngle()));
+            mAccelerometerAngleValueTextView.setText(String.valueOf(Math.round(lastMessage.getAccelerometerAngle())));
+            mMagnetometerAngleValueTextView.setText(String.valueOf(Math.round(lastMessage.getMagnetometerAngle())));
         } else {
             mReceiveTimestampTextViewValue.setText(R.string.no_data);
             mRecordTimestampTextViewValue.setText(R.string.no_data);

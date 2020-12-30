@@ -14,8 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TelemetricTechDemo">
         <activity
-            android:name=".ui.DeviceMessagesActivity"
-            android:parentActivityName=".ui.DeviceListActivity"/>
+            android:name=".ui.DeviceMessagesActivity"/>
         <activity
             android:name=".ui.CameraScreenActivity"
             android:parentActivityName=".ui.DeviceCreateActivity"/>
