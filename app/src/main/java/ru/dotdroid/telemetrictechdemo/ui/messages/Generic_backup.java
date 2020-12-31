@@ -17,6 +17,7 @@ import com.google.gson.JsonParseException;
 import java.util.List;
 
 import ru.dotdroid.telemetrictechdemo.R;
+import ru.dotdroid.telemetrictechdemo.json.Device;
 import ru.dotdroid.telemetrictechdemo.json.DeviceMessage;
 import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
 import ru.dotdroid.telemetrictechdemo.utils.TelemetricApi;
@@ -27,21 +28,31 @@ public class Generic_backup extends Fragment {
 
     final private static String TAG = "Generic";
 
-    private static final String ARG_DEVICE_ID = "device_id";
+    private static final String ARG_DEVICE_EUI = "device_eui";
     private static final String ARG_MESSAGES_START = "messages_start";
     private static final String ARG_MESSAGES_END = "messages_end";
 
-    private String mDeviceId;
+    private Device mDevice;
+
+    private String mDeviceEui, mDeviceId;
     private long mMessagesStart, mMessagesEnd;
 
     private RecyclerView mMessagesRecyclerView;
     private MessagesAdapter mAdapter;
 
-    public static Generic_backup newInstance(String deviceId, long start, long end) {
+    public static Generic_backup newInstance(String deviceEui, long start, long end) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_DEVICE_ID, deviceId);
+        args.putSerializable(ARG_DEVICE_EUI, deviceEui);
         args.putSerializable(ARG_MESSAGES_START, start);
         args.putSerializable(ARG_MESSAGES_END, end);
+        Generic_backup fragment = new Generic_backup();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static Generic_backup newInstance(String deviceEui) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_DEVICE_EUI, deviceEui);
         Generic_backup fragment = new Generic_backup();
         fragment.setArguments(args);
         return fragment;
@@ -50,11 +61,25 @@ public class Generic_backup extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDeviceId = (String) getArguments().getSerializable(ARG_DEVICE_ID);
-        mMessagesStart = (Long) getArguments().getSerializable(ARG_MESSAGES_START);
-        mMessagesEnd = (Long) getArguments().getSerializable(ARG_MESSAGES_END);
 
-        new getMessages().execute();
+        DeviceLab deviceLab = DeviceLab.get(getContext());
+
+        if(getArguments().getSerializable(ARG_MESSAGES_START) != null) {
+            mDeviceEui = (String) getArguments().getSerializable(ARG_DEVICE_EUI);
+            mMessagesStart = (Long) getArguments().getSerializable(ARG_MESSAGES_START);
+            mMessagesEnd = (Long) getArguments().getSerializable(ARG_MESSAGES_END);
+            mDevice = deviceLab.getDevice(mDeviceEui);
+            mDeviceId = mDevice.getId();
+            new getMessages().execute();
+        } else {
+            mDeviceEui = (String) getParentFragment().getArguments().getSerializable(ARG_DEVICE_EUI);
+            mDevice = deviceLab.getDevice(mDeviceEui);
+            DeviceMessage.Messages lastMessage = new Gson().fromJson(mDevice.getLastMessage(), DeviceMessage.Messages.class);
+            List<DeviceMessage.Messages> messages = deviceLab.getMessages();
+            messages.add(lastMessage);
+
+            updateUI();
+        }
     }
 
     @Override
@@ -65,7 +90,10 @@ public class Generic_backup extends Fragment {
         setRetainInstance(true);
 
         mMessagesRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_container);
-        mMessagesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        mMessagesRecyclerView.setLayoutManager(linearLayoutManager);
 
         return view;
     }
@@ -111,17 +139,17 @@ public class Generic_backup extends Fragment {
             mRssiTextView.setText(R.string.rssi);
             mBatteryTextView.setText(R.string.battery);
             mReceiveTimestampTextViewValue.setText(unixToDate(mMessage.getDateTime()));
-            if (mMessage.getRecordTimestamp() != 0) {
-                mRecordTimestampTextViewValue.setText(unixToDate(mMessage.getRecordTimestamp()));
-            } else {
-                mRecordTimestampTextViewValue.setText(unixToDate(mMessage.getRecordTimestamp2()));
-            }
+//            if (mMessage.getRecordTimestamp() != 0) {
+//                mRecordTimestampTextViewValue.setText(unixToDate(mMessage.getRecordTimestamp()));
+//            } else {
+//                mRecordTimestampTextViewValue.setText(unixToDate(mMessage.getRecordTimestamp2()));
+//            }
             mRssiTextViewValue.setText(String.valueOf(mMessage.getLoRaRssi()));
-            if(mMessage.getBatteryLevel() != 0) {
-                mBatteryTextViewValue.setText(String.valueOf(mMessage.getBatteryLevel()));
-            } else {
-                mBatteryTextViewValue.setText(String.valueOf(mMessage.getBatteryLevel2()));
-            }
+//            if(mMessage.getBatteryLevel() != 0) {
+//                mBatteryTextViewValue.setText(String.valueOf(mMessage.getBatteryLevel()));
+//            } else {
+//                mBatteryTextViewValue.setText(String.valueOf(mMessage.getBatteryLevel2()));
+//            }
         }
 
         @Override

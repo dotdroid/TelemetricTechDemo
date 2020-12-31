@@ -27,6 +27,7 @@ import ru.dotdroid.telemetrictechdemo.json.Response;
 import ru.dotdroid.telemetrictechdemo.ui.lastmessage.Generic;
 import ru.dotdroid.telemetrictechdemo.ui.lastmessage.Inertia;
 import ru.dotdroid.telemetrictechdemo.ui.lastmessage.Water;
+import ru.dotdroid.telemetrictechdemo.ui.messages.Generic_backup;
 import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
 import ru.dotdroid.telemetrictechdemo.utils.ErrorParse;
 import ru.dotdroid.telemetrictechdemo.utils.TelemetricApi;
@@ -164,7 +165,7 @@ public class DeviceFragment extends Fragment {
         } else if (mDevice.getDeviceTypeId().equals("82")) {
             childFragment = Inertia.newInstance(ARG_DEVICE_EUI);
         } else {
-            childFragment = Generic.newInstance(ARG_DEVICE_EUI);
+            childFragment = Generic_backup.newInstance(ARG_DEVICE_EUI);
         }
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.device_fragment_container, childFragment).commit();

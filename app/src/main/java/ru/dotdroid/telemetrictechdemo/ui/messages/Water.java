@@ -65,7 +65,10 @@ public class Water extends Fragment {
         setRetainInstance(true);
 
         mMessagesRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_container);
-        mMessagesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        mMessagesRecyclerView.setLayoutManager(linearLayoutManager);
 
         return view;
     }
