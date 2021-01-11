@@ -3,10 +3,10 @@ package ru.dotdroid.telemetrictechdemo.ui;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +23,7 @@ import java.util.List;
 import ru.dotdroid.telemetrictechdemo.R;
 import ru.dotdroid.telemetrictechdemo.json.Device;
 import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
+import ru.dotdroid.telemetrictechdemo.utils.MyDateFormat;
 import ru.dotdroid.telemetrictechdemo.utils.TelemetricApi;
 
 public class DeviceListFragment extends Fragment {
@@ -100,7 +101,7 @@ public class DeviceListFragment extends Fragment {
     }
 
     private class DeviceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView mTitleTextView, mDevEUITextView;
+        private final TextView mTitleTextView, mDevEUITextView, mLastActiveValueTextView;
         private final ImageView mDeviceImageView, mStatusImageView;
 
         private Device mDevice;
@@ -108,9 +109,9 @@ public class DeviceListFragment extends Fragment {
         public DeviceHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.fragment_list_item_device, parent, false));
             itemView.setOnClickListener(this);
-
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_title);
             mDevEUITextView = (TextView) itemView.findViewById(R.id.list_item_deveui);
+            mLastActiveValueTextView = (TextView) itemView.findViewById(R.id.list_item_last_active);
             mDeviceImageView = (ImageView) itemView.findViewById(R.id.list_device_image);
             mStatusImageView = (ImageView) itemView.findViewById(R.id.list_online_indicator);
         }
@@ -119,7 +120,10 @@ public class DeviceListFragment extends Fragment {
             mDevice = device;
             long currentTime = Calendar.getInstance().getTimeInMillis() / 1000L;
             mTitleTextView.setText(mDevice.getTitle());
-            mDevEUITextView.setText(mDevice.getDeviceEui());
+            mDevEUITextView.setText(mDevice.getDeviceEui().toUpperCase());
+            long shortDate = Long.parseLong(mDevice.getLastActive());
+            String shortDateStr = MyDateFormat.unixToShortDate(shortDate);
+            mLastActiveValueTextView.setText(shortDateStr);
 
             if(mDevice.getDeviceTypeId().equals("17")){
                 mDeviceImageView.setImageResource(R.drawable.icon_power);

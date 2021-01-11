@@ -1,6 +1,6 @@
 package ru.dotdroid.telemetrictechdemo.ui;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 public class DeviceCreateActivity extends SingleFragmentActivity {
 

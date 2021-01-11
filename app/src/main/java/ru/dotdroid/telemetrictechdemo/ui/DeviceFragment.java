@@ -5,8 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,19 +27,16 @@ import ru.dotdroid.telemetrictechdemo.json.Response;
 import ru.dotdroid.telemetrictechdemo.ui.lastmessage.Generic;
 import ru.dotdroid.telemetrictechdemo.ui.lastmessage.Inertia;
 import ru.dotdroid.telemetrictechdemo.ui.lastmessage.Water;
-import ru.dotdroid.telemetrictechdemo.ui.messages.Generic_backup;
 import ru.dotdroid.telemetrictechdemo.utils.DeviceLab;
 import ru.dotdroid.telemetrictechdemo.utils.ErrorParse;
 import ru.dotdroid.telemetrictechdemo.utils.TelemetricApi;
 
 public class DeviceFragment extends Fragment {
 
-    private static final String TAG = "DeviceFragment";
-
     public static final String EXTRA_DEVICE_EUI = "ru.dotdroid.telemetrictechdemo.device_eui";
     public static final String EXTRA_MESSAGES_START = "ru.dotdroid.telemetrictechdemo.messages_start";
     public static final String EXTRA_MESSAGES_END = "ru.dotdroid.telemetrictechdemo.messages_end";
-
+    private static final String TAG = "DeviceFragment";
     private static final String ARG_DEVICE_EUI = "device_eui";
 
     private Device mDevice;
@@ -122,11 +119,11 @@ public class DeviceFragment extends Fragment {
         mDevEUITextTextView = (TextView) viewForFragment.findViewById(R.id.device_deveui_text);
         mDevEUITextTextView.setText(R.string.deveui);
         mDevEUITextView = (TextView) viewForFragment.findViewById(R.id.device_deveui);
-        mDevEUITextView.setText(mDevice.getDeviceEui());
+        mDevEUITextView.setText(mDevice.getDeviceEui().toUpperCase());
         mAppKeyTextTextView = (TextView) viewForFragment.findViewById(R.id.device_appkey_text);
         mAppKeyTextTextView.setText(R.string.app_key);
         mAppKeyTextView = (TextView) viewForFragment.findViewById(R.id.device_appkey);
-        mAppKeyTextView.setText(mDevice.getKeyAp());
+        mAppKeyTextView.setText(mDevice.getKeyAp().toUpperCase());
         mLastMessageTextView = (TextView) viewForFragment.findViewById(R.id.device_last_message_text);
         mLastMessageTextView.setText(R.string.last_message);
         mLastMessageFragment = (FrameLayout) viewForFragment.findViewById(R.id.device_fragment_container);
@@ -165,7 +162,7 @@ public class DeviceFragment extends Fragment {
         } else if (mDevice.getDeviceTypeId().equals("82")) {
             childFragment = Inertia.newInstance(ARG_DEVICE_EUI);
         } else {
-            childFragment = Generic_backup.newInstance(ARG_DEVICE_EUI);
+            childFragment = Generic.newInstance(ARG_DEVICE_EUI);
         }
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.device_fragment_container, childFragment).commit();

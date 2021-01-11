@@ -40,4 +40,5 @@
     <string name="no_data">-</string>
     <string name="last_30days_messages">Messages (for the last 30 days)</string>
     <string name="all_messages">All messages</string>
+    <string name="last_active">Last active:</string>
 </resources>

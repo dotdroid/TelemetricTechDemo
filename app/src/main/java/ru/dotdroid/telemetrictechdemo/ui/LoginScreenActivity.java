@@ -3,13 +3,12 @@ package ru.dotdroid.telemetrictechdemo.ui;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import com.google.android.material.textfield.TextInputLayout;
 
 import ru.dotdroid.telemetrictechdemo.R;
 import ru.dotdroid.telemetrictechdemo.utils.ErrorParse;
@@ -17,10 +16,10 @@ import ru.dotdroid.telemetrictechdemo.utils.TelemetricApi;
 
 public class LoginScreenActivity extends AppCompatActivity {
 
-    private TextView mEmailTextView, mPasswordTextView;
-    private EditText mEmailTextViewField, mPasswordTextViewField;
+    private TextInputLayout mEmailFieldLayout, mPasswordFieldLayout;
     private Button mLogInButton;
-    private String mEmail, mPassword;
+    private String mEmail = "", mPassword = "";
+    private boolean mEmailValid, mPasswordValid;
 
     private static final String TAG = "LoginScreen";
 
@@ -29,72 +28,76 @@ public class LoginScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        mEmailTextView = findViewById(R.id.login_email_text);
-        mEmailTextView.setText(R.string.email);
-        mPasswordTextView = findViewById(R.id.login_password_text);
-        mPasswordTextView.setText(R.string.password);
-
-        mEmailTextViewField = findViewById(R.id.login_email_field);
-        mEmailTextViewField.addTextChangedListener(new TextWatcher() {
+        mEmailFieldLayout = (TextInputLayout) findViewById(R.id.login_email_layout);
+        mEmailFieldLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence text, int start, int count, int after) {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mEmail = s.toString();
+            public void onTextChanged(CharSequence text, int start, int before, int count) {
+                mEmail = text.toString();
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable text) {
             }
         });
 
-
-        mPasswordTextViewField = findViewById(R.id.login_password_field);
-        mPasswordTextViewField.addTextChangedListener(new TextWatcher() {
+        mPasswordFieldLayout = (TextInputLayout) findViewById(R.id.login_password_layout);
+        mPasswordFieldLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence text, int start, int count, int after) {
+
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mPassword = s.toString();
+            public void onTextChanged(CharSequence text, int start, int before, int count) {
+                mPassword = text.toString();
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable text) {
 
             }
         });
 
-        mLogInButton = findViewById(R.id.login_button);
+        mLogInButton = (Button) findViewById(R.id.login_button);
         mLogInButton.setText(R.string.login);
         mLogInButton.setOnClickListener(v -> {
-            if(validateField()) {
+            validate();
+            if(mEmailValid && mPasswordValid) {
                 new sendLogin().execute();
             }
         });
     }
 
-    public boolean validateField() {
-        boolean valid = true;
-
-        if (mEmail == null || !Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()) {
-            mEmailTextViewField.setError("Enter a valid email address");
-            valid = false;
+    private void validate() {
+        if (mPassword.equals("")) {
+            mEmailFieldLayout.setError("Email is required");
+            mEmailFieldLayout.setErrorEnabled(true);
+            mEmailValid = false;
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(mEmail).matches() ) {
+            mEmailFieldLayout.setError("Please enter a valid email address");
+            mEmailFieldLayout.setErrorEnabled(true);
+            mEmailValid = false;
         } else {
-            mEmailTextViewField.setError(null);
+            mEmailFieldLayout.setErrorEnabled(false);
+            mEmailValid = true;
         }
 
-        if (mPassword == null || mPassword.length() < 6) {
-            mPasswordTextViewField.setError("Password must be 6 or more characters");
-            valid = false;
+        if (mPassword.equals("")) {
+            mPasswordFieldLayout.setError("Password is required");
+            mPasswordFieldLayout.setErrorEnabled(true);
+            mPasswordValid = false;
+        } else if (mPassword.length() < 5 ) {
+            mPasswordFieldLayout.setError("Password is required and length must be >= 5");
+            mPasswordFieldLayout.setErrorEnabled(true);
+            mPasswordValid = false;
         } else {
-            mPasswordTextViewField.setError(null);
+            mPasswordFieldLayout.setErrorEnabled(false);
+            mPasswordValid = true;
         }
-
-        return valid;
     }
 
     private class sendLogin extends AsyncTask<Void, Void, Void> {
